@@ -1,25 +1,52 @@
-import logo from './logo.svg';
+import { useState, useEffect } from "react";
+
+import { authService } from "./FirebaseModules";
+
+import AppRouter from "./Router.js";
+
 import './App.css';
 
+
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [init, setInit] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userObject, setUserObject] = useState(null);
+
+
+
+    useEffect(() => {
+        authService.onAuthStateChanged((user) => {
+            if (user) {
+                setIsLoggedIn(true);
+                setUserObject(user);
+            }
+
+            else {
+                setIsLoggedIn(false);
+            }
+
+            setInit(true);
+        })
+    }, [])
+
+
+
+    return (
+        <div>
+            {
+                init
+
+                    ?
+
+                    <AppRouter isLoggedIn={isLoggedIn} userObject={userObject} />
+
+                    :
+
+                    <div>로딩중</div>
+            }
+        </div>
+    );
 }
 
 export default App;
