@@ -59,8 +59,8 @@ function NewUser({ userObject, setInit }) {
                     유형
                 </label>
                 <br />
-                <input type="button" value="학생" onClick={(event) => setUserType("student")} />
-                <input type="button" value="선생님" onClick={(event) => setUserType("teacher")} />
+                <input type="button" value="학생" onClick={() => setUserType("student")} />
+                <input type="button" value="선생님" onClick={() => setUserType("teacher")} />
                 <br /><br />
 
                 <label>
