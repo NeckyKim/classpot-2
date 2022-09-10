@@ -9,7 +9,7 @@ import ValidUser from "./ValidUser";
 
 function Home({ userObject }) {
     const [userData, setUserData] = useState(undefined);
-    const [init, setInit] = useState();
+    const [init, setInit] = useState(null);
 
 
 
@@ -22,10 +22,6 @@ function Home({ userObject }) {
         if (userData !== undefined) {
             setInit(true);
         }
-
-        else {
-            setInit(false);
-        }
     })
 
 
@@ -34,7 +30,7 @@ function Home({ userObject }) {
         <div>
             <br /><br /><br />
             {
-                init
+                init === true
 
                 &&
 
@@ -42,7 +38,7 @@ function Home({ userObject }) {
             }
 
             {
-                !init
+                init === false
 
                 &&
 

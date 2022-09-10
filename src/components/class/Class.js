@@ -5,7 +5,8 @@ import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, getDoc, collection, documentId } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
-import Students from "./Students";
+import StudentTab from "./StudentTab";
+import TestTab from "./TestTab";
 
 
 
@@ -107,13 +108,8 @@ function Class({ userObject }) {
                     <button onClick={() => { setTab(3) }}>시험</button>
                     <button onClick={() => { setTab(4) }}>공지사항</button>
 
-                    {
-                        tab === 1
-
-                        &&
-
-                        <Students userObject={userObject} userData={userData} classId={classId} />
-                    }
+                    { tab === 1 && <StudentTab userObject={userObject} userData={userData} classId={classId} /> }
+                    { tab === 3 && <TestTab userObject={userObject} userData={userData} classId={classId} /> }
                 </div>
             }
 

@@ -1,0 +1,11 @@
+.questionInputZone {
+    width: 100%;
+    height: 100px;
+    resize: none;
+}
+
+.answerInputZone {
+    width: 100%;
+    height: 100px;
+    resize: none;
+}

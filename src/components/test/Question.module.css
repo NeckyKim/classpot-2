@@ -1,0 +1,14 @@
+.questionElements {
+    width: 100%;
+    border: 1px solid rgb(100, 100, 100);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.question {
+    white-space: pre-wrap;
+}
+
+.answer {
+    white-space: pre-wrap;
+}

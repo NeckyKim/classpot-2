@@ -6,7 +6,7 @@ import { onSnapshot, query, where } from "firebase/firestore";
 
 
 
-function Students({ userObject, userData, classId }) {
+function StudentTab({ userObject, userData, classId }) {
     const [isAddingStudent, setIsAddingStudent] = useState(false);
     const [studentEmail, setStudentEmail] = useState("");
     const [findingResults, setFindingResults] = useState(undefined);
@@ -16,6 +16,7 @@ function Students({ userObject, userData, classId }) {
     const [myStudentsInfo, setMyStudentsInfo] = useState([]);
 
 
+    
     // [선생님] 이메일로 학생 찾기
     function findStudentByEmail(email) {
         onSnapshot(query(collection(dbService, "users"), where("email", "==", email)), (snapshot) => {
@@ -29,7 +30,7 @@ function Students({ userObject, userData, classId }) {
 
 
 
-    // [선생님] 학생 정보
+    // [선생님] 학생 정보 목록
     useEffect(() => {
         onSnapshot(query(collection(dbService, "classes", classId, "students")), (snapshot) => {
             setMyStudents(snapshot.docs.map((current) => ({ userId: current.id, ...current.data() })));
@@ -37,7 +38,6 @@ function Students({ userObject, userData, classId }) {
     }, [])
 
     useEffect(() => {
-
         for (var i = 0; i < myStudents.length; i++) {
             const verified = myStudents[i].verified;
             getDoc(doc(dbService, "users", myStudents[i].userId)).then((doc) => { setMyStudentsInfo(prev => [...prev, { userId: doc.id, verified: verified, ...doc.data() }]) });
@@ -88,6 +88,8 @@ function Students({ userObject, userData, classId }) {
 
     return (
         <div>
+            학생
+
             {
                 myStudentsInfo.map((current) => (
                     <div>
@@ -138,4 +140,4 @@ function Students({ userObject, userData, classId }) {
     )
 }
 
-export default Students;
+export default StudentTab;
