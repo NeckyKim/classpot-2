@@ -12,19 +12,42 @@ function Question({ number, questionObject, answerSheet, setAnswerSheet, mode })
 
 
     return (
-        <div>
+        <div className={styles.questionElements}>
+            [질문]
+            <div className={styles.question}>
+                {questionObject.question}
+            </div>
+            <br />
+
+            {
+                questionObject.type === "객관식"
+
+                &&
+
+                <div>
+                    [보기]
+                    <br />
+
+                    {questionObject.choices[0]}<br />
+                    {questionObject.choices[1]}<br />
+                    {questionObject.choices[2]}<br />
+                    {questionObject.choices[3]}<br />
+                    {questionObject.choices[4]}<br />
+                    {questionObject.choices[5]}<br />
+                    {questionObject.choices[6]}<br />
+                    {questionObject.choices[7]}<br />
+                    {questionObject.choices[8]}<br />
+                    {questionObject.choices[9]}<br />
+                    <br />
+                </div>
+            }
+
             {
                 mode === "teacher"
 
                 &&
 
-                <div className={styles.questionElements}>
-                    [질문]
-                    <div className={styles.question}>
-                        {questionObject.question}
-                    </div>
-                    <br />
-
+                <div>
                     [정답]
                     <div className={styles.answer}>
                         {questionObject.answer}
@@ -37,13 +60,7 @@ function Question({ number, questionObject, answerSheet, setAnswerSheet, mode })
 
                 &&
 
-                <div className={styles.questionElements}>
-                    [질문]
-                    <div className={styles.question}>
-                        {questionObject.question}
-                    </div>
-                    <br />
-
+                <div>
                     [답안]
                     <br />
                     <textarea

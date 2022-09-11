@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, getDoc, setDoc, collection, documentId, orderBy } from "firebase/firestore";
+import { doc, setDoc, collection, documentId, orderBy } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
 import Question from "./Question";
+import AddQuestion from "./AddQuestion";
 
 import styles from "./Test.module.css";
 
@@ -20,11 +21,8 @@ function Test({ userObject }) {
     const [myStudents, setMyStudents] = useState([]);
     const [myQuestions, setMyQuestions] = useState([]);
 
-    const [isCreatingQuestion, setIsCreatingQuestion] = useState(false);
-    const [question, setQuestion] = useState("");
-    const [answer, setAnswer] = useState("");
+    const [isAddingQuestion, setIsAddingQuestion] = useState(false);
 
-    const [showNotice, setShowNotice] = useState(true);
     const [number, setNumber] = useState(0);
     const [answerSheet, setAnswerSheet] = useState({});
 
@@ -59,29 +57,6 @@ function Test({ userObject }) {
             setMyQuestions(snapshot.docs.map((current) => ({ ...current.data() })));
         });
     }, [])
-
-
-
-    // [선생님] 질문 추가
-    async function addQuestion(event) {
-        event.preventDefault();
-
-        try {
-            await setDoc(doc(collection(dbService, "classes", classId, "tests", testId, "questions")), {
-                question: question,
-                answer: answer,
-                createdTime: Date.now()
-            })
-
-            setIsCreatingQuestion(false);
-            setQuestion("");
-            setAnswer("");
-        }
-
-        catch (error) {
-            alert("질문 추가에 실패했습니다.");
-        }
-    }
 
 
 
@@ -132,59 +107,22 @@ function Test({ userObject }) {
                 &&
 
                 <div>
-                    <button onClick={() => { setIsCreatingQuestion(true) }}>
-                        문제 추가
-                    </button>
-
                     {
                         myQuestions?.map((current) => (
                             <Question questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} mode="teacher" />
                         ))
                     }
 
+                    <button onClick={() => { setIsAddingQuestion(true) }}>
+                        문제 추가
+                    </button>
+
                     {
-                        isCreatingQuestion
+                        isAddingQuestion
 
                         &&
 
-                        <form onSubmit={addQuestion}>
-                            질문
-                            <br />
-
-                            <textarea
-                                type="text"
-                                value={question}
-                                onChange={(event) => setQuestion(event.target.value)}
-                                required
-                                spellCheck="false"
-                                className={styles.questionInputZone}
-                            />
-                            <br />
-
-                            정답
-                            <br />
-
-                            <textarea
-                                type="text"
-                                value={answer}
-                                onChange={(event) => setAnswer(event.target.value)}
-                                required
-                                spellCheck="false"
-                                className={styles.answerInputZone}
-                            />
-                            <br />
-
-                            <input
-                                type="submit"
-                                value="문제 생성"
-                            />
-
-                            <input
-                                type="button"
-                                onClick={() => setIsCreatingQuestion(false)}
-                                value="취소"
-                            />
-                        </form>
+                        <AddQuestion setIsAddingQuestion={setIsAddingQuestion} />
                     }
                 </div>
             }
