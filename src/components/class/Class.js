@@ -5,6 +5,7 @@ import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, getDoc, collection, documentId } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import HeaderBottom from "../header/HeaderBottom";
 import StudentTab from "./StudentTab";
 import TestTab from "./TestTab";
 
@@ -97,11 +98,8 @@ function Class({ userObject }) {
                 &&
 
                 <div>
-                    <br /><br /><br />
-                    강의실
-                    <br />
-                    {classInfo.className}
-                    <br /><br />
+                    <br /><br /><br /><br /><br /><br /><br />
+                    <HeaderBottom className={classInfo?.className} classCode={classInfo?.classId} />
 
                     <button onClick={() => { setTab(1) }}>학생</button>
                     <button onClick={() => { setTab(2) }}>출결</button>

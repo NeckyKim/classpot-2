@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 
-import Header from "./components/header/Header";
+import HeaderTop from "./components/header/HeaderTop";
 import Login from "./components/login/Login";
 import Home from "./components/home/Home";
 import Class from "./components/class/Class";
@@ -13,7 +12,7 @@ function AppRouter({ isLoggedIn, userObject }) {
         <div>
             <BrowserRouter>
                 {
-                    isLoggedIn && <Header />
+                    isLoggedIn && <HeaderTop />
                 }
 
                 <Routes>

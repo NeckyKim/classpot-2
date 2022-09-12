@@ -1,14 +1,72 @@
 .questionElements {
-    width: 100%;
-    border: 1px solid rgb(100, 100, 100);
-    padding: 10px;
-    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid rgb(170, 220, 255);
+    margin-bottom: 20px;
 }
 
-.question {
+.questionHeader {
+    height: 50px;
+    border-radius: 10px 10px 0px 0px;
+    background-color: rgb(170, 220, 255);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.questionNumber {
+    height: 30px;
+    line-height: 30px;
+    font-size: 1.5rem;
+}
+
+.questionPoints {
+    height: 30px;
+    line-height: 30px;
+    text-align: right;
+}
+
+.questionContent {
+    padding: 20px;
+}
+
+.questionZone {
+    font-size: 1.2rem;
+    white-space: pre-wrap;
+    margin-bottom: 30px;
+}
+
+.choicesGreen {
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(100, 200, 100);
+    font-size: 1.2rem;
+    padding: 10px;
+    margin-bottom: 10px;
     white-space: pre-wrap;
 }
 
-.answer {
+.choicesNormal {
+    border-radius: 5px;
+    background-color: rgb(170, 220, 255);
+    font-size: 1.2rem;
+    padding: 10px;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+}
+
+.answerHeader {
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    margin-bottom: 10px;
+}
+
+.answerZone {
+    border-radius: 5px;
+    background-color: rgb(170, 220, 255);
+    font-size: 1.2rem;
+    padding: 10px;
     white-space: pre-wrap;
 }

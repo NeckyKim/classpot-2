@@ -5,6 +5,7 @@ import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, collection, documentId, orderBy } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import HeaderBottom from "../header/HeaderBottom";
 import Question from "./Question";
 import AddQuestion from "./AddQuestion";
 
@@ -16,6 +17,7 @@ function Test({ userObject }) {
     let { classId } = useParams();
     let { testId } = useParams();
 
+    const [classInfo, setClassInfo] = useState([]);
     const [testInfo, setTestInfo] = useState([]);
 
     const [myStudents, setMyStudents] = useState([]);
@@ -33,6 +35,15 @@ function Test({ userObject }) {
 
         onSnapshot(query(collection(dbService, "classes", classId, "students")), (snapshot) => {
             setMyStudents(snapshot.docs.map((current) => ({ userId: current.id, ...current.data() })));
+        });
+    }, [])
+
+
+
+    // 수업 정보
+    useEffect(() => {
+        onSnapshot(query(collection(dbService, "classes"), where(documentId(), "==", classId)), (snapshot) => {
+            setClassInfo(snapshot.docs.map((current) => ({ classId: current.id, ...current.data() }))[0]);
         });
     }, [])
 
@@ -98,7 +109,7 @@ function Test({ userObject }) {
 
     return (
         <div>
-            <br /><br /><br /><br />
+            <br /><br /><br /><br /><br /><br />
 
             {
                 // 선생님 전용 화면
@@ -107,9 +118,11 @@ function Test({ userObject }) {
                 &&
 
                 <div>
+                    <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
+
                     {
-                        myQuestions?.map((current) => (
-                            <Question questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} mode="teacher" />
+                        myQuestions?.map((current, index) => (
+                            <Question number={index + 1} questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} mode="teacher" />
                         ))
                     }
 
@@ -134,6 +147,7 @@ function Test({ userObject }) {
                 &&
 
                 <div>
+                    <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
 
                     <button onClick={() => {
                         if (number !== 0) {

@@ -13,65 +13,119 @@ function Question({ number, questionObject, answerSheet, setAnswerSheet, mode })
 
     return (
         <div className={styles.questionElements}>
-            [질문]
-            <div className={styles.question}>
-                {questionObject.question}
+            <div className={styles.questionHeader}>
+                <div className={styles.questionNumber}>
+                    {number}
+                </div>
+
+                <div className={styles.questionPoints}>
+                    {questionObject.points}점
+                </div>
             </div>
-            <br />
 
-            {
-                questionObject.type === "객관식"
 
-                &&
-
-                <div>
-                    [보기]
-                    <br />
-
-                    {questionObject.choices[0]}<br />
-                    {questionObject.choices[1]}<br />
-                    {questionObject.choices[2]}<br />
-                    {questionObject.choices[3]}<br />
-                    {questionObject.choices[4]}<br />
-                    {questionObject.choices[5]}<br />
-                    {questionObject.choices[6]}<br />
-                    {questionObject.choices[7]}<br />
-                    {questionObject.choices[8]}<br />
-                    {questionObject.choices[9]}<br />
-                    <br />
+            <div className={styles.questionContent}>
+                <div className={styles.questionZone}>
+                    {questionObject.question}
                 </div>
-            }
 
-            {
-                mode === "teacher"
+                {
+                    mode === "teacher"
 
-                &&
+                    &&
 
-                <div>
-                    [정답]
-                    <div className={styles.answer}>
-                        {questionObject.answer}
+                    <div>
+                        {
+                            questionObject.type === "객관식"
+
+                            &&
+
+                            <div>
+                                <div className={styles.answerHeader}>
+                                    보기
+                                </div>
+
+                                <div className={questionObject.answer === 0 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[0]}</div>
+                                <div className={questionObject.answer === 1 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[1]}</div>
+                                <div className={questionObject.answer === 2 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[2]}</div>
+                                <div className={questionObject.answer === 3 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[3]}</div>
+                                <div className={questionObject.answer === 4 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[4]}</div>
+                                <div className={questionObject.answer === 5 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[5]}</div>
+                                <div className={questionObject.answer === 6 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[6]}</div>
+                                <div className={questionObject.answer === 7 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[7]}</div>
+                                <div className={questionObject.answer === 8 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[8]}</div>
+                                <div className={questionObject.answer === 9 ? styles.choicesGreen : styles.choicesNormal}>{questionObject.choices[9]}</div>
+                            </div>
+                        }
+
+                        {
+                            questionObject.type === "진위형"
+
+                            &&
+
+                            <div>
+                                <div className={styles.answerHeader}>
+                                    정답
+                                </div>
+
+                                <div className={styles.answerZone}>
+                                    {questionObject.answer === true ? "참" : "거짓"}
+                                </div>
+                            </div>
+                        }
+
+                        {
+                            questionObject.type === "주관식"
+
+                            &&
+
+                            <div>
+                                <div className={styles.answerHeader}>
+                                    정답
+                                </div>
+
+                                <div className={styles.answerZone}>
+                                    {questionObject.answer}
+                                </div>
+                            </div>
+                        }
+
+                        {
+                            questionObject.type === "서술형"
+
+                            &&
+
+                            <div>
+                                <div className={styles.answerHeader}>
+                                    정답
+                                </div>
+
+                                <div className={styles.answerZone}>
+                                    {questionObject.answer}
+                                </div>
+                            </div>
+                        }
                     </div>
-                </div>
-            }
+                }
 
-            {
-                mode === "student"
+                {
+                    mode === "student"
 
-                &&
+                    &&
 
-                <div>
-                    [답안]
-                    <br />
-                    <textarea
-                        type="text"
-                        name={number}
-                        onChange={onChangeAnswerSheet}
-                        value={answerSheet}
-                        spellCheck="false"
-                    />
-                </div>
-            }
+                    <div>
+                        [답안]
+                        <br />
+                        <textarea
+                            type="text"
+                            name={number}
+                            onChange={onChangeAnswerSheet}
+                            value={answerSheet}
+                            spellCheck="false"
+                        />
+                    </div>
+                }
+            </div>
         </div>
     )
 }

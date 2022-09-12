@@ -57,6 +57,7 @@ function AddQuestion({ setIsAddingQuestion }) {
 
     return (
         <div className={styles.background}>
+            <br /><br /><br /><br />
             <form onSubmit={addQuestion} className={styles.container}>
                 유형
                 <br />
