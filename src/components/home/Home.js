@@ -22,6 +22,10 @@ function Home({ userObject }) {
         if (userData !== undefined) {
             setInit(true);
         }
+
+        else {
+            setInit(false);
+        }
     })
 
 

@@ -1,0 +1,117 @@
+.questionContainer {
+    width: 60vw;
+    max-width: 60%;
+    border-radius: 10px;
+    border: 1px solid rgb(210, 210, 210);
+    margin-bottom: 30px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.questionHeader {
+    height: 60px;
+    border-radius: 10px 10px 0px 0px;
+    background-color: rgb(235, 235, 235);
+    display: grid;
+    grid-template-columns: 1fr 80px 60px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.questionNumber {
+    height: 30px;
+    line-height: 30px;
+    color: rgb(0, 100, 255);
+    font-size: 1.8rem;
+}
+
+.questionType {
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 100, 255);
+    border-radius: 5px 0px 0px 5px;
+    text-align: center;
+}
+
+.questionPoints {
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    color: rgb(0, 100, 255);
+    background-color: rgb(255, 255, 255);
+    border-radius: 0px 5px 5px 0px;
+    text-align: center;
+}
+
+.questionContent {
+    padding: 20px;
+}
+
+.questionZone {
+    font-size: 1.2rem;
+    white-space: pre-wrap;
+    margin-bottom: 30px;
+}
+
+.choicesAnswer {
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 100, 255);
+    font-size: 1.2rem;
+    padding: 10px;
+    margin-bottom: 5px;
+    white-space: pre-wrap;
+}
+
+.choicesNormal {
+    border-radius: 5px;
+    background-color: rgb(235, 235, 235);
+    font-size: 1.2rem;
+    padding: 10px;
+    margin-bottom: 5px;
+    white-space: pre-wrap;
+}
+
+.answerHeader {
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    margin-bottom: 5px;
+}
+
+.answerZone {
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 100, 255);
+    font-size: 1.2rem;
+    padding: 10px;
+    white-space: pre-wrap;
+}
+
+.editButton {
+    width: 70px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(250, 150, 50);
+    border-radius: 5px;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.deleteButton {
+    width: 70px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 50, 50);
+    border-radius: 5px;
+    border: none;
+    margin-top: 20px;
+    margin-left: 5px;
+    cursor: pointer;
+}

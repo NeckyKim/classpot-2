@@ -2,46 +2,45 @@ import { useState } from "react";
 import { useParams } from "react-router";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, setDoc, collection } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
-import styles from "./AddQuestion.module.css";
+import styles from "./EditQuestion.module.css";
 
 
-function AddQuestion({ setIsAddingQuestion }) {
+function EditQuestion({ questionObject, setIsEditingQuestion }) {
     let { classId } = useParams();
     let { testId } = useParams();
 
-    const [type, setType] = useState("객관식");
-    const [points, setPoints] = useState(null);
-    const [question, setQuestion] = useState("");
-    const [answer, setAnswer] = useState(0);
+    const [type, setType] = useState(questionObject.type);
+    const [points, setPoints] = useState(questionObject.points);
+    const [question, setQuestion] = useState(questionObject.question);
+    const [answer, setAnswer] = useState(questionObject.answer);
 
-    const [listOfChoices, setListOfChoices] = useState([]);
-    const [numberOfChoices, setNumberOfChoices] = useState(3);
+    const [listOfChoices, setListOfChoices] = useState(questionObject.choices);
+    const [numberOfChoices, setNumberOfChoices] = useState(Object.keys(questionObject.choices).length);
 
 
 
     // [선생님] 질문 추가
-    async function addQuestion(event) {
+    async function editQuestion(event) {
         event.preventDefault();
 
         try {
-            await setDoc(doc(collection(dbService, "classes", classId, "tests", testId, "questions")), {
+            await updateDoc(doc(dbService, "classes", classId, "tests", testId, "questions", questionObject.questionId), {
                 type: type,
                 points: points,
                 question: question,
                 answer: answer,
                 choices: listOfChoices,
-                createdTime: Date.now()
             })
 
-            setIsAddingQuestion(false);
+            setIsEditingQuestion(false);
             setQuestion("");
             setAnswer("");
         }
 
         catch (error) {
-            alert("질문 추가에 실패했습니다.");
+            alert("질문 수정에 실패했습니다.");
         }
     }
 
@@ -57,7 +56,7 @@ function AddQuestion({ setIsAddingQuestion }) {
 
     return (
         <div className={styles.background}>
-            <form onSubmit={addQuestion} className={styles.container}>
+            <form onSubmit={editQuestion} className={styles.container}>
                 <span className={styles.properties}>
                     유형
                 </span>
@@ -65,8 +64,8 @@ function AddQuestion({ setIsAddingQuestion }) {
                 <input
                     type="button"
                     value="객관식"
-                    className={type === "객관식" ? styles.typeSelectedLeft : styles.typeNotSelectedLeft }
-                    onClick={() => { 
+                    className={type === "객관식" ? styles.typeSelectedLeft : styles.typeNotSelectedLeft}
+                    onClick={() => {
                         setType("객관식");
                         setListOfChoices([]);
                         setNumberOfChoices(3);
@@ -77,9 +76,9 @@ function AddQuestion({ setIsAddingQuestion }) {
                 <input
                     type="button"
                     value="진위형"
-                    className={type === "진위형" ? styles.typeSelectedCenter : styles.typeNotSelectedCenter }
-                    onClick={() => { 
-                        setType("진위형"); 
+                    className={type === "진위형" ? styles.typeSelectedCenter : styles.typeNotSelectedCenter}
+                    onClick={() => {
+                        setType("진위형");
                         setAnswer(true);
                     }}
                 />
@@ -87,8 +86,8 @@ function AddQuestion({ setIsAddingQuestion }) {
                 <input
                     type="button"
                     value="주관식"
-                    className={type === "주관식" ? styles.typeSelectedCenter : styles.typeNotSelectedCenter }
-                    onClick={() => { 
+                    className={type === "주관식" ? styles.typeSelectedCenter : styles.typeNotSelectedCenter}
+                    onClick={() => {
                         setType("주관식");
                         setAnswer(null);
                     }}
@@ -97,8 +96,8 @@ function AddQuestion({ setIsAddingQuestion }) {
                 <input
                     type="button"
                     value="서술형"
-                    className={type === "서술형" ? styles.typeSelectedRight : styles.typeNotSelectedRight }
-                    onClick={() => { 
+                    className={type === "서술형" ? styles.typeSelectedRight : styles.typeNotSelectedRight}
+                    onClick={() => {
                         setType("서술형");
                         setAnswer(null);
                     }}
@@ -135,6 +134,7 @@ function AddQuestion({ setIsAddingQuestion }) {
                     spellCheck="false"
                     className={styles.questionInputBox}
                 />
+                <br /><br />
 
 
 
@@ -248,7 +248,7 @@ function AddQuestion({ setIsAddingQuestion }) {
 
                     <div>
                         <span className={styles.properties}>
-                             정답
+                            정답
                         </span>
 
                         <input type="button" className={answer === true ? styles.answerTrueChecked : styles.answerTrueNotChecked} onClick={() => { setAnswer(true) }} value="참" />
@@ -262,12 +262,10 @@ function AddQuestion({ setIsAddingQuestion }) {
                     type === "주관식"
 
                     &&
-
                     <div>
                         <span className={styles.properties}>
                             정답
                         </span>
-                    
                         <textarea
                             type="text"
                             value={answer}
@@ -283,7 +281,7 @@ function AddQuestion({ setIsAddingQuestion }) {
 
                 <input
                     type="submit"
-                    value="문제 생성"
+                    value="문제 수정"
                     className={styles.submitButton}
                 />
 
@@ -291,11 +289,11 @@ function AddQuestion({ setIsAddingQuestion }) {
                     type="button"
                     value="취소"
                     className={styles.cancelButton}
-                    onClick={() => setIsAddingQuestion(false)}
+                    onClick={() => { setIsEditingQuestion(false); }}
                 />
             </form>
         </div>
     )
 }
 
-export default AddQuestion;
+export default EditQuestion;

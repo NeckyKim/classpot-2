@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 
 import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, collection, documentId, orderBy } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
 import HeaderBottom from "../header/HeaderBottom";
-import Question from "./Question";
+import TeacherQuestion from "./TeacherQuestion";
+import StudentQuestion from "./StudentQuestion";
 import AddQuestion from "./AddQuestion";
 
 import styles from "./Test.module.css";
@@ -16,6 +17,8 @@ import styles from "./Test.module.css";
 function Test({ userObject }) {
     let { classId } = useParams();
     let { testId } = useParams();
+
+    let navigate = useNavigate();
 
     const [classInfo, setClassInfo] = useState([]);
     const [testInfo, setTestInfo] = useState([]);
@@ -65,7 +68,7 @@ function Test({ userObject }) {
         setMyQuestions([]);
 
         onSnapshot(query(collection(dbService, "classes", classId, "tests", testId, "questions"), orderBy("createdTime", "asc")), (snapshot) => {
-            setMyQuestions(snapshot.docs.map((current) => ({ ...current.data() })));
+            setMyQuestions(snapshot.docs.map((current) => ({ questionId: current.id, ...current.data() })));
         });
     }, [])
 
@@ -107,10 +110,20 @@ function Test({ userObject }) {
 
 
 
+    // [학생] 시험 종료
+    function finishTest() {
+        const ok = window.confirm("답안지를 제출하고, 시험을 종료하시겠습니까?");
+
+        if (ok) {
+            sendAnswerSheet();
+            navigate("/class/" + classId);
+        }
+    }
+
+
+
     return (
         <div>
-            <br /><br /><br /><br /><br /><br />
-
             {
                 // 선생님 전용 화면
                 testInfo.teacherId === userObject.uid
@@ -120,15 +133,17 @@ function Test({ userObject }) {
                 <div>
                     <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
 
-                    {
-                        myQuestions?.map((current, index) => (
-                            <Question number={index + 1} questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} mode="teacher" />
-                        ))
-                    }
+                    <div className={styles.blank} />
 
-                    <button onClick={() => { setIsAddingQuestion(true) }}>
+                    <button className={styles.addButton} onClick={() => { setIsAddingQuestion(true) }}>
                         문제 추가
                     </button>
+
+                    {
+                        myQuestions?.map((current, index) => (
+                            <TeacherQuestion number={index} questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
+                        ))
+                    }
 
                     {
                         isAddingQuestion
@@ -147,9 +162,32 @@ function Test({ userObject }) {
                 &&
 
                 <div>
-                    <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
+                    <div className={styles.container}>
+                        <div className={styles.headerInfo}>
+                            <span className={styles.className}>
+                                {classInfo?.className}
+                            </span>
 
-                    <button onClick={() => {
+                            {
+                                testInfo?.testName
+
+                                &&
+
+
+                                <span className={styles.testName}>
+                                    {testInfo?.testName}
+                                </span>
+                            }
+                        </div>
+
+                        <button className={styles.submitButton} onClick={finishTest}>
+                            시험 종료
+                        </button>
+                    </div >
+
+
+
+                    <button className={styles.previousButton} onClick={() => {
                         if (number !== 0) {
                             setNumber(number - 1);
                             sendAnswerSheet();
@@ -158,7 +196,7 @@ function Test({ userObject }) {
                         이전
                     </button>
 
-                    <button onClick={() => {
+                    <button className={styles.nextButton} onClick={() => {
                         if (number !== myQuestions.length - 1) {
                             setNumber(number + 1);
                             sendAnswerSheet();
@@ -168,8 +206,14 @@ function Test({ userObject }) {
                     </button>
 
 
-                    <Question number={number} questionObject={myQuestions[number]} answerSheet={answerSheet[number]} setAnswerSheet={setAnswerSheet} mode="student" />
 
+                    {
+                        myQuestions.length !== 0
+
+                        &&
+
+                        <StudentQuestion number={number} questionObject={myQuestions[number]} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
+                    }
                 </div>
             }
         </div>
