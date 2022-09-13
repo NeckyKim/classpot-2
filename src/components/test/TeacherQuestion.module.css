@@ -53,6 +53,7 @@
 
 .questionZone {
     font-size: 1.2rem;
+    text-align: justify;
     white-space: pre-wrap;
     margin-bottom: 30px;
 }

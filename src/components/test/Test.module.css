@@ -64,24 +64,57 @@
     cursor: pointer;
 }
 
+.testContainer {
+    width: 80%;
+    height: 50px;
+    margin-left: 10%;
+    margin-top: 100px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 60px 60px 1fr 50px 100px;
+}
+
 .previousButton {
-    width: 50px;
-    font-size: 1.2rem;
+    width: 60px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.5rem;
     border: none;
     background-color: transparent;
     cursor: pointer;
-    margin-top: 100px;
-    margin-bottom: 10px;
-    margin-left: 10vw;
 }
 
 .nextButton {
-    width: 50px;
-    font-size: 1.2rem;
+    width: 60px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.5rem;
     border: none;
     background-color: transparent;
     cursor: pointer;
-    margin-top: 100px;
-    margin-bottom: 10px;
-    margin-left: 20px;
+}
+
+.timeIcon {
+    height: 50px;
+    padding: 10px;
+    background-color: rgb(255, 50, 50);
+    border-radius: 5px 0px 0px 5px;
+}
+
+.timeIcon img {
+    height: 30px;
+    filter: invert();
+}
+
+.timeValue {
+    width: 100px;
+    height: 50px;
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255);
+    display: inline-flex;
+    align-items: center;
+    justify-content: right;
+    padding-right: 15px;
+    background-color: rgb(255, 50, 50);
+    border-radius: 0px 5px 5px 0px;
 }

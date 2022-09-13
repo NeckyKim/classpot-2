@@ -122,11 +122,55 @@ function Test({ userObject }) {
 
 
 
+    // 현재 시간
+    const [time, setTime] = useState(new Date());
+
+    function CurrentTime() {
+        useEffect(() => {
+            const id = setInterval(() => {
+                setTime(new Date());
+            }, 1000);
+            return (() => clearInterval(id))
+        }, []);
+
+        var startTime = new Date(testInfo?.startDate);
+        var currentTime = time
+        var finishTime = new Date(testInfo?.startDate + Number(testInfo?.duration) * 60000);
+
+        var minutes = Math.floor((finishTime.getTime() - currentTime.getTime()) / 60000);
+        var seconds = Math.floor((((finishTime.getTime() - currentTime.getTime()) / 60000) - minutes) * 60);
+
+        return (<>{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}</>)
+    }
+
+
+
+    // 시험 응시 시간 확인
+    function isTestTime() {
+        var startTime = new Date(testInfo?.startDate)
+        var currentTime = time
+        var finishTime = new Date(testInfo?.startDate + Number(testInfo?.duration) * 60000);
+
+        if (currentTime < startTime) {
+            return "before"
+        }
+
+        else if (currentTime > startTime && currentTime < finishTime) {
+            return "running"
+        }
+
+        else if (currentTime > finishTime) {
+            return "after"
+        }
+    }
+
+
+
     return (
         <div>
             {
                 // 선생님 전용 화면
-                testInfo.teacherId === userObject.uid
+                testInfo?.teacherId === userObject.uid
 
                 &&
 
@@ -138,6 +182,8 @@ function Test({ userObject }) {
                     <button className={styles.addButton} onClick={() => { setIsAddingQuestion(true) }}>
                         문제 추가
                     </button>
+
+
 
                     {
                         myQuestions?.map((current, index) => (
@@ -162,57 +208,97 @@ function Test({ userObject }) {
                 &&
 
                 <div>
-                    <div className={styles.container}>
-                        <div className={styles.headerInfo}>
-                            <span className={styles.className}>
-                                {classInfo?.className}
-                            </span>
-
-                            {
-                                testInfo?.testName
-
-                                &&
-
-
-                                <span className={styles.testName}>
-                                    {testInfo?.testName}
-                                </span>
-                            }
-                        </div>
-
-                        <button className={styles.submitButton} onClick={finishTest}>
-                            시험 종료
-                        </button>
-                    </div >
-
-
-
-                    <button className={styles.previousButton} onClick={() => {
-                        if (number !== 0) {
-                            setNumber(number - 1);
-                            sendAnswerSheet();
-                        }
-                    }}>
-                        이전
-                    </button>
-
-                    <button className={styles.nextButton} onClick={() => {
-                        if (number !== myQuestions.length - 1) {
-                            setNumber(number + 1);
-                            sendAnswerSheet();
-                        }
-                    }}>
-                        다음
-                    </button>
-
-
-
                     {
-                        myQuestions.length !== 0
+                        isTestTime() === "before"
 
                         &&
 
-                        <StudentQuestion number={number} questionObject={myQuestions[number]} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
+                        <div>
+                            응시 전
+                        </div>
+                    }
+
+                    {
+                        isTestTime() === "running"
+
+                        &&
+
+                        <div>
+                            <div className={styles.container}>
+                                <div className={styles.headerInfo}>
+                                    <span className={styles.className}>
+                                        {classInfo?.className}
+                                    </span>
+
+                                    {
+                                        testInfo?.testName
+
+                                        &&
+
+
+                                        <span className={styles.testName}>
+                                            {testInfo?.testName}
+                                        </span>
+                                    }
+                                </div>
+
+                                <button className={styles.submitButton} onClick={finishTest}>
+                                    시험 종료
+                                </button>
+                            </div >
+
+
+                            <div className={styles.testContainer}>
+                                <button className={styles.previousButton} onClick={() => {
+                                    if (number !== 0) {
+                                        setNumber(number - 1);
+                                        sendAnswerSheet();
+                                    }
+                                }}>
+                                    이전
+                                </button>
+
+                                <button className={styles.nextButton} onClick={() => {
+                                    if (number !== myQuestions.length - 1) {
+                                        setNumber(number + 1);
+                                        sendAnswerSheet();
+                                    }
+                                }}>
+                                    다음
+                                </button>
+
+                                <div />
+
+                                <div className={styles.timeIcon}>
+                                    <img alt="icon" src={process.env.PUBLIC_URL + "/icon/clock.png"} />
+                                </div>
+
+                                <div className={styles.timeValue}>
+                                    <CurrentTime />
+                                </div>
+                            </div>
+
+                            {
+                                myQuestions.length !== 0
+
+                                &&
+
+                                <div>
+                                    <StudentQuestion number={number} questionObject={myQuestions[number]} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    {
+                        isTestTime() === "after"
+
+                        &&
+
+                        <div>
+                            <br /><br /><br /><br /><br />
+                            시험 종료
+                        </div>
                     }
                 </div>
             }

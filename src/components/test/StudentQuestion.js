@@ -1,10 +1,6 @@
 import styles from "./StudentQuestion.module.css";
 
 function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }) {
-    console.log(answerSheet)
-
-
-
     function onChoiceClick(event) {
         setAnswerSheet((prev) => {
             return { ...prev, [number]: Number(event.target.value) }
