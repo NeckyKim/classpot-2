@@ -1,0 +1,164 @@
+.background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 3;
+}
+
+.container {
+    width: 600px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    display: block;
+    margin: 0px auto;
+    margin-top: 300px;
+    padding: 30px;
+}
+
+.noTests {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: rgb(150, 150, 150);
+}
+
+.headerElements {
+    height: 40px;
+    background-color: rgb(235, 235, 235);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 300px 100px;
+}
+
+.headerValue {
+    height: 20px;
+    line-height: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.testElements {
+    height: 60px;
+    border-bottom: 1px solid rgb(210, 210, 210);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: grid;
+    grid-template-columns: 1fr 300px 100px;
+}
+
+.testName {
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.startDate {
+    font-size: 1.2rem;
+    color: rgb(150, 150, 150);
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.duration {
+    font-size: 1.2rem;
+    color: rgb(150, 150, 150);
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.properties {
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 20px;
+}
+
+.testNameInputBox {
+    width: 400px;
+    height: 40px;
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    background-color: rgb(230, 230, 230);
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.testDateInputBox {
+    width: 300px;
+    height: 40px;
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    background-color: rgb(230, 230, 230);
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.durationInputBox {
+    width: 100px;
+    height: 40px;
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    background-color: rgb(230, 230, 230);
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.addButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(250, 150, 50);
+    border-radius: 5px;
+    border: none;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.submitButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 100, 255);
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.cancelButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    background-color: rgb(200, 200, 200);
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}

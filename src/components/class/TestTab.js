@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, setDoc, getDoc, deleteDoc, collection } from "firebase/firestore";
-import { onSnapshot, query, where } from "firebase/firestore";
+import { doc, setDoc, collection } from "firebase/firestore";
+import { onSnapshot, query } from "firebase/firestore";
 
-
-
+import styles from "./TestTab.module.css";
 
 
 
@@ -44,6 +43,9 @@ function TestTab({ userObject, userData, classId }) {
 
             alert("시험이 등록되었습니다.");
             setIsCreatingTest(false);
+            setTestName("");
+            setStartDate("");
+            setDuration(null);
         }
 
         catch (error) {
@@ -55,52 +57,92 @@ function TestTab({ userObject, userData, classId }) {
 
     return (
         <div>
-            시험
-
             {
-                myTests.map((current, index) => (
-                    <div key={index}>
-                        <Link link to={"test/" + current.testId}>
-                            {current.testName}
-                        </Link>
+                myTests.length
+
+                    ?
+
+                    <div>
+                        <div className={styles.headerElements}>
+                            <div className={styles.headerValue}>시험 이름</div>
+                            <div className={styles.headerValue}>시작 일시</div>
+                            <div className={styles.headerValue}>응시 시간</div>
+                        </div>
+
+                        {
+                            myTests.map((current, index) => (
+                                <div key={index}>
+                                    <Link link to={"test/" + current.testId} style={{ textDecoration: "none" }}>
+                                        <div className={styles.testElements}>
+                                            <div className={styles.testName}>
+                                                {current.testName}
+                                            </div>
+                                            
+                                            <div className={styles.startDate}>
+                                                {new Date(current.startDate).toLocaleString()}
+                                            </div>
+
+                                            <div className={styles.startDate}>
+                                                {current.duration}분
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </div>
+                            ))
+                        }
                     </div>
-                ))
+
+                    :
+
+                    <div className={styles.noTests}>
+                        시험이 없습니다.
+                    </div>
             }
 
-            <button onClick={() => { setIsCreatingTest(true) }}>
+            <button className={styles.addButton} onClick={() => { setIsCreatingTest(true) }}>
                 시험 추가
             </button>
+
+
 
             {
                 isCreatingTest
 
                 &&
 
-                <form onSubmit={addTest}>
-                    <label>
-                        시험 이름
-                    </label>
+                <form className={styles.background} onSubmit={addTest}>
+                    <div className={styles.container}>
+                        <label className={styles.properties}>
+                            시험 이름
+                        </label>
 
-                    <input type="text" value={testName} onChange={(event) => { setTestName(event.target.value) }} required />
+                        <input className={styles.testNameInputBox} type="text" value={testName} onChange={(event) => { setTestName(event.target.value) }} required />
+                        <br />
 
-                    <label>
-                        시작 일시
-                    </label>
+                        <label className={styles.properties}>
+                            시작 일시
+                        </label>
 
-                    <input type="datetime-local" value={startDate} onChange={(event) => { setStartDate(event.target.value) }} required />
+                        <input className={styles.testDateInputBox} type="datetime-local" value={startDate} onChange={(event) => { setStartDate(event.target.value) }} required />
+                        <br />
 
-                    <label>
-                        응시 시간
-                    </label>
+                        <label className={styles.properties}>
+                            응시 시간
+                        </label>
 
-                    <input type="number" value={duration} onChange={(event) => { setDuration(event.target.value) }} required />
+                        <input className={styles.durationInputBox} type="number" value={duration} onChange={(event) => { setDuration(event.target.value) }} required />
+                        분
+                        <br />
 
-                    <input type="submit" value="시험 생성" />
+                        <input className={styles.submitButton} type="submit" value="시험 생성" />
 
-                    <input type="button" value="취소" onClick={() => {
-                        setIsCreatingTest(false);
-                        setTestName("");
-                    }} />
+                        <input className={styles.cancelButton} type="button" value="취소" onClick={() => {
+                            setIsCreatingTest(false);
+                            setTestName("");
+                            setStartDate("");
+                            setDuration(null);
+                        }} />
+                    </div>
                 </form>
             }
         </div>

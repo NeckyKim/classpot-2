@@ -1,0 +1,153 @@
+.background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 3;
+}
+
+.container {
+    width: 600px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    display: block;
+    margin: 0px auto;
+    margin-top: 300px;
+    padding: 30px;
+}
+
+.noStudents {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: rgb(150, 150, 150);
+}
+
+.headerElements {
+    height: 40px;
+    background-color: rgb(235, 235, 235);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+}
+
+.headerValue {
+    height: 20px;
+    line-height: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.studentElements {
+    height: 60px;
+    border-bottom: 1px solid rgb(210, 210, 210);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: grid;
+    grid-template-columns: 200px 2fr 80px;
+}
+
+.studentName {
+    font-size: 1.5rem;
+    color: rgb(0, 100, 255);
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.studentEmail {
+    font-size: 1.2rem;
+    color: rgb(150, 150, 150);
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.addButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(250, 150, 50);
+    border-radius: 5px;
+    border: none;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.deleteButton {
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 50, 50);
+    border-radius: 5px;
+    border: none;
+}
+
+.cancelButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    background-color: rgb(200, 200, 200);
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.emailInputBox {
+    width: calc(100% - 130px);
+    height: 40px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(230, 230, 230);
+    padding: 10px;
+}
+
+.emailSearchButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(250, 150, 50);
+    border-radius: 5px;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.messageGreen {
+    margin-top: 10px;
+    height: 30px;
+    color: rgb(0, 200, 255);
+}
+
+.messageRed {
+    margin-top: 10px;
+    height: 30px;
+    color: rgb(255, 50, 50);
+}
+
+.sendRequestButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 200, 255);
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.comment {
+    margin-bottom: 30px;
+}
+
+.commentHighlight {
+    font-size: 1.3rem;
+    color: rgb(0, 100, 255);
+}

@@ -1,0 +1,39 @@
+.blank {
+    height: 180px;
+}
+
+.container {
+    width: 60%;
+    margin-left: 20%;
+}
+
+.tabSelected {
+    width: 100px;
+    height: 50px;
+    font-size: 1.2rem;
+    border: none;
+    color: rgb(0, 100, 255);
+    background-color: transparent;
+    border-bottom: 3px solid rgb(0, 100, 255);
+    margin-bottom: 30px;
+}
+
+.tabNotSelected {
+    width: 100px;
+    height: 50px;
+    font-size: 1.2rem;
+    border: none;
+    color: rgb(200, 200, 200);
+    background-color: transparent;
+    border-bottom: 3px solid rgb(200, 200, 200);
+    margin-bottom: 30px;
+}
+
+
+
+@media screen and (max-width: 1200px) {
+    .container {
+        width: 90%;
+        margin-left: 5%;
+    }
+}

@@ -56,8 +56,8 @@ function AddQuestion({ setIsAddingQuestion }) {
 
 
     return (
-        <div className={styles.background}>
-            <form onSubmit={addQuestion} className={styles.container}>
+        <form onSubmit={addQuestion} className={styles.background}>
+            <div className={styles.container}>
                 <span className={styles.properties}>
                     유형
                 </span>
@@ -293,8 +293,8 @@ function AddQuestion({ setIsAddingQuestion }) {
                     className={styles.cancelButton}
                     onClick={() => setIsAddingQuestion(false)}
                 />
-            </form>
-        </div>
+            </div>
+        </form>
     )
 }
 

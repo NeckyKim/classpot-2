@@ -48,7 +48,6 @@
   box-sizing: border-box;
   font-family: 'Noto Sans KR';
   font-weight: 1000;
-  transition: 0.3s;
 }
 
 input:focus {

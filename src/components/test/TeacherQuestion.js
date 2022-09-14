@@ -120,22 +120,6 @@ function TeacherQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                         </div>
                     }
 
-                    {
-                        questionObject.type === "서술형"
-
-                        &&
-
-                        <div>
-                            <div className={styles.answerHeader}>
-                                정답
-                            </div>
-
-                            <div className={styles.answerZone}>
-                                {questionObject.answer}
-                            </div>
-                        </div>
-                    }
-
                     <button className={styles.editButton} onClick={() => { setIsEditingQuestion(true); }}>
                         수정
                     </button>

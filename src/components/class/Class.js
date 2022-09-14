@@ -9,6 +9,8 @@ import HeaderBottom from "../header/HeaderBottom";
 import StudentTab from "./StudentTab";
 import TestTab from "./TestTab";
 
+import styles from "./Class.module.css";
+
 
 
 function Class({ userObject }) {
@@ -90,7 +92,7 @@ function Class({ userObject }) {
 
 
     return (
-        <div>
+        <div className={styles.container}>
             {
                 // 선생님 화면
                 userData?.userType === "teacher" && teacherMyClasses.map((row) => row.classId).includes(classId)
@@ -98,16 +100,17 @@ function Class({ userObject }) {
                 &&
 
                 <div>
-                    <br /><br /><br /><br /><br /><br /><br />
+                    <div className={styles.blank} />
+
                     <HeaderBottom className={classInfo?.className} classCode={classInfo?.classId} />
 
-                    <button onClick={() => { setTab(1) }}>학생</button>
-                    <button onClick={() => { setTab(2) }}>출결</button>
-                    <button onClick={() => { setTab(3) }}>시험</button>
-                    <button onClick={() => { setTab(4) }}>공지사항</button>
+                    <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>학생</button>
+                    <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>출결</button>
+                    <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>시험</button>
+                    <button className={tab === 4 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(4) }}>공지사항</button>
 
-                    { tab === 1 && <StudentTab userObject={userObject} userData={userData} classId={classId} /> }
-                    { tab === 3 && <TestTab userObject={userObject} userData={userData} classId={classId} /> }
+                    {tab === 1 && <StudentTab userObject={userObject} userData={userData} classId={classId} />}
+                    {tab === 3 && <TestTab userObject={userObject} userData={userData} classId={classId} />}
                 </div>
             }
 

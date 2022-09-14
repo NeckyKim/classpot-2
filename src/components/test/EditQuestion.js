@@ -55,8 +55,8 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
 
 
     return (
-        <div className={styles.background}>
-            <form onSubmit={editQuestion} className={styles.container}>
+        <form onSubmit={editQuestion} className={styles.background}>
+            <div className={styles.container}>
                 <span className={styles.properties}>
                     유형
                 </span>
@@ -291,8 +291,8 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
                     className={styles.cancelButton}
                     onClick={() => { setIsEditingQuestion(false); }}
                 />
-            </form>
-        </div>
+            </div>
+        </form>
     )
 }
 

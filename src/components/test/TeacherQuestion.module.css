@@ -1,11 +1,8 @@
 .questionContainer {
-    width: 60vw;
-    max-width: 60%;
+    width: 100%;
     border-radius: 10px;
     border: 1px solid rgb(210, 210, 210);
     margin-bottom: 30px;
-    margin-left: 20%;
-    margin-right: 20%;
 }
 
 .questionHeader {
@@ -66,6 +63,7 @@
     padding: 10px;
     margin-bottom: 5px;
     white-space: pre-wrap;
+    text-align: justify;
 }
 
 .choicesNormal {
@@ -75,6 +73,7 @@
     padding: 10px;
     margin-bottom: 5px;
     white-space: pre-wrap;
+    text-align: justify;
 }
 
 .answerHeader {

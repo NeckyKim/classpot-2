@@ -9,6 +9,7 @@ import HeaderBottom from "../header/HeaderBottom";
 import TeacherQuestion from "./TeacherQuestion";
 import StudentQuestion from "./StudentQuestion";
 import AddQuestion from "./AddQuestion";
+import EditInfo from "./EditInfo";
 
 import styles from "./Test.module.css";
 
@@ -17,6 +18,7 @@ import styles from "./Test.module.css";
 function Test({ userObject }) {
     let { classId } = useParams();
     let { testId } = useParams();
+    const [tab, setTab] = useState(1);
 
     let navigate = useNavigate();
 
@@ -27,9 +29,13 @@ function Test({ userObject }) {
     const [myQuestions, setMyQuestions] = useState([]);
 
     const [isAddingQuestion, setIsAddingQuestion] = useState(false);
+    const [isEditingInfo, setIsEditingInfo] = useState(false);
 
     const [number, setNumber] = useState(0);
     const [answerSheet, setAnswerSheet] = useState({});
+
+    const [status, setStatus] = useState(null);
+
 
 
     // 학생 목록
@@ -127,13 +133,17 @@ function Test({ userObject }) {
 
     function CurrentTime() {
         useEffect(() => {
-            const id = setInterval(() => {
-                setTime(new Date());
-            }, 1000);
+            const id = setInterval(() => {setTime(new Date());}, 1000);
             return (() => clearInterval(id))
         }, []);
 
-        var startTime = new Date(testInfo?.startDate);
+        return (<></>)
+    }
+
+
+    
+    // 남은 시간
+    function RemainingTime() {
         var currentTime = time
         var finishTime = new Date(testInfo?.startDate + Number(testInfo?.duration) * 60000);
 
@@ -152,16 +162,23 @@ function Test({ userObject }) {
         var finishTime = new Date(testInfo?.startDate + Number(testInfo?.duration) * 60000);
 
         if (currentTime < startTime) {
-            return "before"
+            return "before";
         }
 
         else if (currentTime > startTime && currentTime < finishTime) {
-            return "running"
+            return "running";
         }
 
         else if (currentTime > finishTime) {
-            return "after"
+            return "after";
         }
+    }
+
+    
+
+    // 시험 종료시 자동으로 답안지 제출
+    if (String(time) === String(new Date(testInfo?.startDate + Number(testInfo?.duration) * 60000))) {
+        sendAnswerSheet();
     }
 
 
@@ -174,29 +191,68 @@ function Test({ userObject }) {
 
                 &&
 
-                <div>
-                    <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
-
+                <div className={styles.container}>
                     <div className={styles.blank} />
 
-                    <button className={styles.addButton} onClick={() => { setIsAddingQuestion(true) }}>
-                        문제 추가
-                    </button>
+                    <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
 
-
-
-                    {
-                        myQuestions?.map((current, index) => (
-                            <TeacherQuestion number={index} questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
-                        ))
-                    }
+                    <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>설정</button>
+                    <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>문제</button>
+                    <br />
 
                     {
-                        isAddingQuestion
+                        tab === 1
 
                         &&
 
-                        <AddQuestion setIsAddingQuestion={setIsAddingQuestion} />
+                        <div>
+                            <button className={styles.addButton} onClick={() => {
+                                setIsEditingInfo(true)
+                            }}>
+                                설정 변경
+                            </button>
+                            <br />
+
+                            {testInfo.testName}<br />
+                            {new Date(testInfo.startDate).toLocaleString()}<br />
+                            {testInfo.duration}
+
+                            {
+                                isEditingInfo
+
+                                &&
+
+                                <EditInfo testInfo={testInfo} setIsEditingInfo={setIsEditingInfo} classId={classId} testId={testId} />
+                            }
+                        </div>
+                    }
+
+                    {
+                        tab === 2
+
+                        &&
+
+                        <div>
+                            <button className={styles.addButton} onClick={() => {
+                                setIsAddingQuestion(true)
+                            }}>
+                                문제 추가
+                            </button>
+
+                            {
+                                myQuestions?.map((current, index) => (
+                                    <TeacherQuestion number={index} questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
+                                ))
+                            }
+
+                            {
+                                isAddingQuestion
+
+                                &&
+
+                                <AddQuestion setIsAddingQuestion={setIsAddingQuestion} />
+                            }
+                        </div>
                     }
                 </div>
             }
@@ -207,15 +263,23 @@ function Test({ userObject }) {
 
                 &&
 
-                <div>
+                <div className={styles.testModeContainer}>
+                    <CurrentTime />
+
                     {
                         isTestTime() === "before"
 
                         &&
 
                         <div>
-                            응시 전
+                            <div className={styles.blank} />
+                            시험 시작 전입니다. <br />
+                            시작 시간이 되면 자동으로 화면이 전환되면서 시험이 시작됩니다. <br /><br />
+
+                            {/* {new Date(testInfo.startDate).toLocaleString()}<br />
+                            {testInfo.duration} */}
                         </div>
+
                     }
 
                     {
@@ -224,7 +288,7 @@ function Test({ userObject }) {
                         &&
 
                         <div>
-                            <div className={styles.container}>
+                            <div className={styles.testHeader}>
                                 <div className={styles.headerInfo}>
                                     <span className={styles.className}>
                                         {classInfo?.className}
@@ -248,7 +312,7 @@ function Test({ userObject }) {
                             </div >
 
 
-                            <div className={styles.testContainer}>
+                            <div className={styles.testNavigator}>
                                 <button className={styles.previousButton} onClick={() => {
                                     if (number !== 0) {
                                         setNumber(number - 1);
@@ -274,7 +338,7 @@ function Test({ userObject }) {
                                 </div>
 
                                 <div className={styles.timeValue}>
-                                    <CurrentTime />
+                                    <RemainingTime />
                                 </div>
                             </div>
 
@@ -288,6 +352,7 @@ function Test({ userObject }) {
                                 </div>
                             }
                         </div>
+
                     }
 
                     {
@@ -296,7 +361,7 @@ function Test({ userObject }) {
                         &&
 
                         <div>
-                            <br /><br /><br /><br /><br />
+                            <div className={styles.blank} />
                             시험 종료
                         </div>
                     }
