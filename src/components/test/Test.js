@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router";
 
 import { dbService } from "../../FirebaseModules";
@@ -135,12 +135,13 @@ function Test({ userObject }) {
 
     function CurrentTime() {
         useEffect(() => {
-            const id = setInterval(() => {setTime(new Date());}, 1000);
+            const id = setInterval(() => { setTime(new Date()); }, 1000);
             return (() => clearInterval(id))
         }, []);
 
         return (<></>)
     }
+
 
 
     // 시작 남은 시간
@@ -163,7 +164,7 @@ function Test({ userObject }) {
     }
 
 
-    
+
     // 남은 시간
     function RemainingTime() {
         var currentTime = time
@@ -198,7 +199,7 @@ function Test({ userObject }) {
         }
     }
 
-    
+
 
     // 시험 종료시 자동으로 답안지 제출
     if (String(time) === String(new Date(testInfo?.startDate + Number(testInfo?.duration) * 60000))) {
@@ -287,160 +288,164 @@ function Test({ userObject }) {
                 // 학생 전용 화면
                 myStudents.map((row) => row.userId).includes(userObject.uid)
 
-                ?
+                    ?
 
-                <div className={styles.testModeContainer}>
-                    <CurrentTime />
+                    <div className={styles.testModeContainer}>
+                        <CurrentTime />
 
-                    {
-                        // [학생] 시험 시작 전
-                        isTestTime() === "before"
+                        {
+                            // [학생] 시험 시작 전
+                            isTestTime() === "before"
 
-                        &&
+                            &&
 
-                        <div>
-                            <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
+                            <div>
+                                <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
 
-                            <div className={styles.blank} />
+                                <div className={styles.blank} />
 
-                            <div className={styles.notTestLoader}>
-                                <BeforeTestLoader
-                                    size={200}
-                                    color="rgb(0, 200, 255)"
-                                    speedMultiplier={0.5}
-                                />
-                            </div>
+                                <div className={styles.notTestLoader}>
+                                    <BeforeTestLoader
+                                        size={200}
+                                        color="rgb(0, 200, 255)"
+                                        speedMultiplier={0.5}
+                                    />
+                                </div>
 
-                            <div className={styles.beforeTestBig}>
-                                시험 시작 전입니다.
-                            </div>
+                                <div className={styles.beforeTestBig}>
+                                    시험 시작 전입니다.
+                                </div>
 
-                            <div className={styles.notTestSmall}>
-                                시작 시간이 되면 자동으로 화면이 전환되면서 시험이 시작됩니다.
-                            </div>
-                            
-                            <div className={styles.startingTime}>
-                                <span className={styles.startingTimeBig}>
-                                    <StartingTime />
-                                </span>
+                                <div className={styles.notTestSmall}>
+                                    시작 시간이 되면 자동으로 화면이 전환되면서 시험이 시작됩니다.
+                                </div>
 
-                                <span className={styles.startingTimeSmall}>
-                                    후 시험 시작
-                                </span>
-                            </div>
-                        </div>
-
-                    }
-
-                    {
-                        // [학생] 시험 진행 중
-                        isTestTime() === "running"
-
-                        &&
-
-                        <div>
-                            <div className={styles.testHeader}>
-                                <div className={styles.headerInfo}>
-                                    <span className={styles.className}>
-                                        {classInfo?.className}
+                                <div className={styles.startingTime}>
+                                    <span className={styles.startingTimeBig}>
+                                        <StartingTime />
                                     </span>
 
-                                    {
-                                        testInfo?.testName
+                                    <span className={styles.startingTimeSmall}>
+                                        후 시험 시작
+                                    </span>
+                                </div>
+                            </div>
 
-                                        &&
+                        }
 
+                        {
+                            // [학생] 시험 진행 중
+                            isTestTime() === "running"
 
-                                        <span className={styles.testName}>
-                                            {testInfo?.testName}
+                            &&
+                            <div className={styles.testBackground}>
+                                <div className={styles.testHeader}>
+                                    <div className={styles.headerInfo}>
+                                        <span className={styles.className}>
+                                            {classInfo?.className}
                                         </span>
-                                    }
+
+                                        {
+                                            testInfo?.testName
+
+                                            &&
+
+
+                                            <span className={styles.testName}>
+                                                {testInfo?.testName}
+                                            </span>
+                                        }
+                                    </div>
+
+                                    <button className={styles.submitButton} onClick={finishTest}>
+                                        시험 종료
+                                    </button>
+                                </div >
+
+
+                                <div className={styles.testNavigator}>
+                                    <button className={styles.previousButton} onClick={() => {
+                                        if (number !== 0) {
+                                            setNumber(number - 1);
+                                            sendAnswerSheet();
+                                        }
+                                    }}>
+                                        이전
+                                    </button>
+
+                                    <button className={styles.nextButton} onClick={() => {
+                                        if (number !== myQuestions.length - 1) {
+                                            setNumber(number + 1);
+                                            sendAnswerSheet();
+                                        }
+                                    }}>
+                                        다음
+                                    </button>
+
+                                    <div />
+
+                                    <div className={styles.timeIcon}>
+                                        <img alt="icon" src={process.env.PUBLIC_URL + "/icon/clock.png"} />
+                                    </div>
+
+                                    <div className={styles.timeValue}>
+                                        <RemainingTime />
+                                    </div>
                                 </div>
 
-                                <button className={styles.submitButton} onClick={finishTest}>
-                                    시험 종료
-                                </button>
-                            </div >
+                                {
+                                    myQuestions.length !== 0
 
+                                    &&
 
-                            <div className={styles.testNavigator}>
-                                <button className={styles.previousButton} onClick={() => {
-                                    if (number !== 0) {
-                                        setNumber(number - 1);
-                                        sendAnswerSheet();
-                                    }
-                                }}>
-                                    이전
-                                </button>
+                                    <div>
+                                        <StudentQuestion number={number} questionObject={myQuestions[number]} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
+                                    </div>
+                                }
+                            </div>
+                        }
 
-                                <button className={styles.nextButton} onClick={() => {
-                                    if (number !== myQuestions.length - 1) {
-                                        setNumber(number + 1);
-                                        sendAnswerSheet();
-                                    }
-                                }}>
-                                    다음
-                                </button>
+                        {
+                            // [학생] 시험 종료 후
+                            isTestTime() === "after"
 
-                                <div />
+                            &&
 
-                                <div className={styles.timeIcon}>
-                                    <img alt="icon" src={process.env.PUBLIC_URL + "/icon/clock.png"} />
+                            <div>
+                                <div className={styles.blank} />
+
+                                <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
+
+                                <div className={styles.notTestLoader}>
+                                    <AfterTestLoader
+                                        size={200}
+                                        color="rgb(150, 150, 150)"
+                                        speedMultiplier={0.5}
+                                    />
                                 </div>
 
-                                <div className={styles.timeValue}>
-                                    <RemainingTime />
+                                <div className={styles.afterTestBig}>
+                                    시험이 종료되었습니다.
+                                </div>
+
+                                <div className={styles.notTestSmall}>
+                                    시험 종료 후 피드백이 공개되지 않은 시험입니다.
                                 </div>
                             </div>
+                        }
+                    </div>
 
-                            {
-                                myQuestions.length !== 0
+                    :
 
-                                &&
+                    <div>
+                        {
+                            testInfo?.teacherId !== userObject.uid
 
-                                <div>
-                                    <StudentQuestion number={number} questionObject={myQuestions[number]} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
-                                </div>
-                            }
-                        </div>
+                            &&
 
-                    }
-
-                    {
-                        // [학생] 시험 종료 후
-                        isTestTime() === "after"
-
-                        &&
-
-                        <div>
-                            <div className={styles.blank} />
-
-                            <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
-
-                            <div className={styles.notTestLoader}>
-                                <AfterTestLoader
-                                    size={200}
-                                    color="rgb(150, 150, 150)"
-                                    speedMultiplier={0.5}
-                                />
-                            </div>
-                            
-                            <div className={styles.afterTestBig}>
-                                시험이 종료되었습니다.
-                            </div>
-
-                            <div className={styles.notTestSmall}>
-                                시험 종료 후 피드백이 공개되지 않은 시험입니다.
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                :
-
-                <div>
-                    <Error message="수업에 등록되지 않은 학생입니다." />
-                </div>
+                            <Error message="수업에 등록되지 않은 학생입니다." />
+                        }
+                    </div>
             }
         </div>
     )

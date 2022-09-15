@@ -46,6 +46,19 @@
     cursor: pointer;
 }
 
+.testBackground {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgb(255, 255, 255);
+    padding-left: 5vw;
+    padding-right: 5vw;
+    padding-top: 130px;
+    z-index: -1;
+}
+
 .testHeader {
     width: 100vw;
     max-width: 100%;
