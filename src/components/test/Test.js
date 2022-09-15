@@ -10,6 +10,10 @@ import TeacherQuestion from "./TeacherQuestion";
 import StudentQuestion from "./StudentQuestion";
 import AddQuestion from "./AddQuestion";
 import EditInfo from "./EditInfo";
+import Error from "../../Error";
+
+import BeforeTestLoader from "react-spinners/RingLoader";
+import AfterTestLoader from "react-spinners/PuffLoader";
 
 import styles from "./Test.module.css";
 
@@ -33,8 +37,6 @@ function Test({ userObject }) {
 
     const [number, setNumber] = useState(0);
     const [answerSheet, setAnswerSheet] = useState({});
-
-    const [status, setStatus] = useState(null);
 
 
 
@@ -141,14 +143,36 @@ function Test({ userObject }) {
     }
 
 
+    // 시작 남은 시간
+    function StartingTime() {
+        var currentTime = time.getTime()
+        var startTime = new Date(testInfo?.startDate).getTime();
+
+        var diff = startTime - currentTime;
+
+        var days = Math.floor(diff / 86400000);
+        var hours = Math.floor((diff - days * 86400000) / 3600000);
+        var minutes = Math.floor((diff - days * 86400000 - hours * 3600000) / 60000);
+        var seconds = Math.floor((diff - days * 86400000 - hours * 3600000 - minutes * 60000) / 1000);
+
+        return (
+            <>
+                {days != 0 && <>{days}일</>} {hours != 0 && <>{hours}시간</>} {minutes != 0 && <>{minutes}분</>} {seconds}초
+            </>
+        )
+    }
+
+
     
     // 남은 시간
     function RemainingTime() {
         var currentTime = time
         var finishTime = new Date(testInfo?.startDate + Number(testInfo?.duration) * 60000);
 
-        var minutes = Math.floor((finishTime.getTime() - currentTime.getTime()) / 60000);
-        var seconds = Math.floor((((finishTime.getTime() - currentTime.getTime()) / 60000) - minutes) * 60);
+        var diff = finishTime - currentTime;
+
+        var minutes = Math.floor(diff / 60000);
+        var seconds = Math.floor((diff - minutes * 60000) / 1000);
 
         return (<>{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}</>)
     }
@@ -257,32 +281,59 @@ function Test({ userObject }) {
                 </div>
             }
 
+
+
             {
                 // 학생 전용 화면
                 myStudents.map((row) => row.userId).includes(userObject.uid)
 
-                &&
+                ?
 
                 <div className={styles.testModeContainer}>
                     <CurrentTime />
 
                     {
+                        // [학생] 시험 시작 전
                         isTestTime() === "before"
 
                         &&
 
                         <div>
-                            <div className={styles.blank} />
-                            시험 시작 전입니다. <br />
-                            시작 시간이 되면 자동으로 화면이 전환되면서 시험이 시작됩니다. <br /><br />
+                            <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
 
-                            {/* {new Date(testInfo.startDate).toLocaleString()}<br />
-                            {testInfo.duration} */}
+                            <div className={styles.blank} />
+
+                            <div className={styles.notTestLoader}>
+                                <BeforeTestLoader
+                                    size={200}
+                                    color="rgb(0, 200, 255)"
+                                    speedMultiplier={0.5}
+                                />
+                            </div>
+
+                            <div className={styles.beforeTestBig}>
+                                시험 시작 전입니다.
+                            </div>
+
+                            <div className={styles.notTestSmall}>
+                                시작 시간이 되면 자동으로 화면이 전환되면서 시험이 시작됩니다.
+                            </div>
+                            
+                            <div className={styles.startingTime}>
+                                <span className={styles.startingTimeBig}>
+                                    <StartingTime />
+                                </span>
+
+                                <span className={styles.startingTimeSmall}>
+                                    후 시험 시작
+                                </span>
+                            </div>
                         </div>
 
                     }
 
                     {
+                        // [학생] 시험 진행 중
                         isTestTime() === "running"
 
                         &&
@@ -356,15 +407,39 @@ function Test({ userObject }) {
                     }
 
                     {
+                        // [학생] 시험 종료 후
                         isTestTime() === "after"
 
                         &&
 
                         <div>
                             <div className={styles.blank} />
-                            시험 종료
+
+                            <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
+
+                            <div className={styles.notTestLoader}>
+                                <AfterTestLoader
+                                    size={200}
+                                    color="rgb(150, 150, 150)"
+                                    speedMultiplier={0.5}
+                                />
+                            </div>
+                            
+                            <div className={styles.afterTestBig}>
+                                시험이 종료되었습니다.
+                            </div>
+
+                            <div className={styles.notTestSmall}>
+                                시험 종료 후 피드백이 공개되지 않은 시험입니다.
+                            </div>
                         </div>
                     }
+                </div>
+
+                :
+
+                <div>
+                    <Error message="수업에 등록되지 않은 학생입니다." />
                 </div>
             }
         </div>

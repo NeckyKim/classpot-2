@@ -148,3 +148,46 @@
     background-color: rgb(255, 50, 50);
     border-radius: 0px 5px 5px 0px;
 }
+
+.notTestLoader {
+    display: flex;
+    justify-content: center;
+    vertical-align: center;
+    margin-top: 50px;
+}
+
+.beforeTestBig {
+    font-size: 3rem;
+    color: rgb(0, 100, 255);
+    text-align: center;
+    margin-top: 40px;
+}
+
+.afterTestBig {
+    font-size: 3rem;
+    color: rgb(150, 150, 150);
+    text-align: center;
+    margin-top: 40px;
+}
+
+.notTestSmall {
+    font-size: 1rem;
+    color: rgb(150, 150, 150);
+    text-align: center;
+}
+
+.startingTime {
+    font-size: 1.2rem;
+    color: rgb(0, 200, 255);
+    text-align: center;
+    margin-top: 40px;
+}
+
+.startingTimeBig {
+    font-size: 1.5rem;
+}
+
+.startingTimeSmall {
+    font-size: 1rem;
+    margin-left: 10px;
+}

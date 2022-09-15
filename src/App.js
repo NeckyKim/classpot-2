@@ -37,13 +37,9 @@ function App() {
             {
                 init
 
-                    ?
+                &&
 
-                    <AppRouter isLoggedIn={isLoggedIn} userObject={userObject} />
-
-                    :
-
-                    <div>로딩중</div>
+                <AppRouter isLoggedIn={isLoggedIn} userObject={userObject} />
             }
         </div>
     );

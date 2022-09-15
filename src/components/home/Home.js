@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, getDoc, addDoc } from "firebase/firestore";
+import { collection } from "firebase/firestore";
+import { onSnapshot, query, where, documentId } from "firebase/firestore";
 
 import NewUser from "./NewUser";
 import ValidUser from "./ValidUser";
@@ -13,10 +14,15 @@ function Home({ userObject }) {
 
 
 
-    // 현재 사용자의 정보가 데이터베이스에 있는지 확인
     useEffect(() => {
-        getDoc(doc(dbService, "users", userObject.uid)).then((doc) => { setUserData(doc.data()); });
-    }, []);
+        onSnapshot(query(collection(dbService, "users"), where(documentId(), "==", userObject.uid)), (snapshot) => {
+            setUserData(snapshot.docs.map((current) => ({
+                ...current.data()
+            }))[0]);
+        });
+    }, [])
+
+    
 
     useEffect(() => {
         if (userData !== undefined) {
@@ -26,13 +32,12 @@ function Home({ userObject }) {
         else {
             setInit(false);
         }
-    })
+    }, [userData])
 
 
 
     return (
         <div>
-            <br /><br /><br />
             {
                 init === true
 
@@ -48,7 +53,6 @@ function Home({ userObject }) {
 
                 <NewUser userObject={userObject} setInit={setInit} />
             }
-
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { onSnapshot, query, where } from "firebase/firestore";
 import HeaderBottom from "../header/HeaderBottom";
 import StudentTab from "./StudentTab";
 import TestTab from "./TestTab";
+import Error from "../../Error";
 
 import styles from "./Class.module.css";
 
@@ -116,18 +117,37 @@ function Class({ userObject }) {
 
             {
                 // 학생 화면
-                userData?.userType === "student" && studentMyClasses.map((row) => row.classId).includes(classId) && verified === true
+                userData?.userType === "student"
 
                 &&
 
                 <div>
-                    <br /><br /><br />
-                    강의실
-                    <br />
-                    {classInfo.className}
-                    <br /><br />
-                </div>
+                    {
 
+                        studentMyClasses.map((row) => row.classId).includes(classId) && verified === true
+
+                            ?
+
+                            <div>
+                                <div className={styles.blank} />
+
+                                <HeaderBottom className={classInfo?.className} classCode={classInfo?.classId} />
+
+                                <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>출결</button>
+                                <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>시험</button>
+                                <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>공지사항</button>
+
+                                {tab === 2 && <TestTab userObject={userObject} userData={userData} classId={classId} />}
+                            </div>
+
+                            :
+
+                            <div>
+                                <Error message="수업에 등록되지 않은 학생입니다." />
+                            </div>
+
+                    }
+                </div>
             }
 
             {
