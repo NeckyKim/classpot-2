@@ -1,0 +1,351 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+
+import { dbService } from "../../FirebaseModules";
+import { doc, updateDoc } from "firebase/firestore";
+
+import styles from "./AnswerSheetQuestion.module.css";
+
+
+
+function AnswerSheetQuestion({ number, questionObject, answer, report, autoGrading, mode }) {
+    let { classId } = useParams();
+    let { testId } = useParams();
+    let { studentId } = useParams()
+
+
+
+    // 수동 채점
+    function manualGrading() {
+        var manualScore;
+
+        if (report === false) {
+            manualScore = Number(prompt("서술형을 채점합니다."));
+        }
+
+        else if (questionObject.type === "서술형") {
+            manualScore = Number(prompt("점수를 변경합니다."));
+        }
+
+        else {
+            manualScore = Number(prompt("해당 문제는 " + questionObject.type + " 유형 문제로 자동으로 채점되었습니다. 직접 점수를 부여할 경우 자동 채점이 해제됩니다."));
+        }
+
+
+        if (manualScore) {
+            updateDoc(doc(dbService, "classes", classId, "tests", testId, "reportcards", studentId), { [number]: manualScore, autoGrading: false });
+        }
+
+
+        else if (isNaN(manualScore)) {
+            alert("점수를 입력하세요.")
+        }
+    }
+
+
+
+    // 오답 처리
+    function changeToIncorrect() {
+        const ok = window.confirm("해당 문제를 정답에서 오답으로 변경하시겠습니까?")
+
+        if (ok) {
+            updateDoc(doc(dbService, "classes", classId, "tests", testId, "reportcards", studentId), { [number]: 0 });
+        }
+    }
+
+
+    // 정답 처리
+    function changeToCorrect() {
+        const ok = window.confirm("해당 문제를 오답에서 정답으로 변경하시겠습니까?")
+
+        if (ok) {
+            updateDoc(doc(dbService, "classes", classId, "tests", testId, "reportcards", studentId), { [number]: Number(questionObject.points) });
+        }
+    }
+
+
+
+    return (
+        <div className={styles.questionContainer}>
+            <div className={styles.questionHeader}>
+                <div className={styles.questionNumber}>
+                    {number + 1}
+                </div>
+
+                <div className={styles.questionType}>
+                    {questionObject.type}
+                </div>
+
+                <div className={styles.questionPoints}>
+                    {questionObject.points}점
+                </div>
+            </div>
+
+
+
+            <div className={styles.questionContent}>
+                <div className={styles.questionZone}>
+                    {questionObject.question}
+                </div>
+
+
+
+                <div>
+                    {
+                        questionObject.type === "객관식"
+
+                        &&
+
+                        <div>
+                            <div className={styles.answerHeader}>
+                                보기
+                            </div>
+
+                            <div className={questionObject.answer === 0 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[0]}</div>
+                            <div className={questionObject.answer === 1 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[1]}</div>
+                            <div className={questionObject.answer === 2 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[2]}</div>
+
+                            {Object.keys(questionObject.choices).length >= 4 && <div className={questionObject.answer === 3 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[3]}</div>}
+                            {Object.keys(questionObject.choices).length >= 5 && <div className={questionObject.answer === 4 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[4]}</div>}
+                            {Object.keys(questionObject.choices).length >= 6 && <div className={questionObject.answer === 5 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[5]}</div>}
+                            {Object.keys(questionObject.choices).length >= 7 && <div className={questionObject.answer === 6 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[6]}</div>}
+                            {Object.keys(questionObject.choices).length >= 8 && <div className={questionObject.answer === 7 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[7]}</div>}
+                            {Object.keys(questionObject.choices).length >= 9 && <div className={questionObject.answer === 8 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[8]}</div>}
+                            {Object.keys(questionObject.choices).length >= 10 && <div className={questionObject.answer === 9 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[9]}</div>}
+
+                            <div className={styles.answerSheetHeader}>
+                                답안
+                            </div>
+
+                            <div className={Number(report) === Number(questionObject.points) ? styles.answerSheetZoneCorrect : styles.answerSheetZoneIncorrect}>
+                                <div>
+                                    {answer && questionObject.choices[answer]}
+                                </div>
+
+                                <div className={Number(report) === Number(questionObject.points) ? styles.reportContainerCorrect : styles.reportContainerIncorrect}>
+                                    {report}점
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    {
+                        questionObject.type === "진위형"
+
+                        &&
+
+                        <div>
+                            <div className={styles.answerHeader}>
+                                정답
+                            </div>
+
+                            <div className={styles.answerZone}>
+                                {questionObject.answer === true ? "참" : "거짓"}
+                            </div>
+
+                            <div className={styles.answerSheetHeader}>
+                                답안
+                            </div>
+
+                            <div className={Number(report) === Number(questionObject.points) ? styles.answerSheetZoneCorrect : styles.answerSheetZoneIncorrect}>
+                                <div>
+                                    {(answer === true || answer === false) && <span>{answer === true ? "참" : "거짓"}</span>}
+                                </div>
+
+                                <div className={Number(report) === Number(questionObject.points) ? styles.reportContainerCorrect : styles.reportContainerIncorrect}>
+                                    {report}점
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    {
+                        questionObject.type === "주관식"
+
+                        &&
+
+                        <div>
+                            <div className={styles.answerHeader}>
+                                정답
+                            </div>
+
+                            <div className={styles.answerZone}>
+                                {questionObject.answer}
+                            </div>
+
+                            <div className={styles.answerSheetHeader}>
+                                답안
+                            </div>
+
+                            <div className={Number(report) === Number(questionObject.points) ? styles.answerSheetZoneCorrect : styles.answerSheetZoneIncorrect}>
+                                <div>
+                                    {answer && answer}
+                                </div>
+
+                                <div className={Number(report) === Number(questionObject.points) ? styles.reportContainerCorrect : styles.reportContainerIncorrect}>
+                                    {report}점
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    {
+                        questionObject.type === "서술형"
+
+                        &&
+
+                        <div>
+                            <div className={styles.answerSheetHeader}>
+                                답안
+                            </div>
+
+                            <div className={
+                                (
+                                    report === false
+
+                                        ?
+
+                                        styles.answerSheetZoneNotGraded
+
+                                        :
+
+                                        (
+                                            Number(report) === Number(questionObject.points)
+
+                                                ?
+
+                                                styles.answerSheetZoneCorrect
+
+                                                :
+
+                                                (
+                                                    Number(report) === 0
+
+                                                        ?
+
+                                                        styles.answerSheetZoneIncorrect
+
+                                                        :
+
+                                                        styles.answerSheetZonePartiallyCorrect
+                                                )
+                                        )
+                                )
+                            }>
+                                <div>
+                                    {answer && answer}
+                                </div>
+
+                                <div className={
+                                    (
+                                        report === false
+
+                                            ?
+
+                                            styles.reportContainerNotGraded
+
+                                            :
+
+                                            (
+                                                Number(report) === Number(questionObject.points)
+
+                                                    ?
+
+                                                    styles.reportContainerCorrect
+
+                                                    :
+
+                                                    (
+                                                        Number(report) === 0
+
+                                                            ?
+
+                                                            styles.reportContainerIncorrect
+
+                                                            :
+
+                                                            styles.reportContainerPartiallyCorrect
+                                                    )
+                                            )
+                                    )
+                                }>
+                                    {report === false ? "채점 안 됨" : <>{report}점</>}
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                {
+                    mode === "teacher"
+
+                    &&
+
+                    <div>
+                        {
+                            questionObject.type === "서술형"
+
+                                ?
+
+                                <div>
+                                    {
+                                        report === false
+
+                                            ?
+
+                                            <div>
+                                                <button className={styles.gradingButton} onClick={manualGrading}>서술형 채점</button>
+                                                <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>
+                                                <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>
+                                            </div>
+
+                                            :
+
+                                            <div>
+                                                {
+                                                    ((report > 0) && (report < Number(questionObject.points)))
+
+                                                        ?
+
+                                                        <div>
+                                                            <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>
+                                                            <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>
+                                                            <button className={styles.manualButton} onClick={manualGrading}>점수 수정</button>
+                                                        </div>
+
+                                                        :
+
+                                                        <div>
+                                                            {report === 0 && <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>}
+                                                            {report === Number(questionObject.points) && <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>}
+                                                            <button className={styles.manualButton} onClick={manualGrading}>점수 수정</button>
+                                                        </div>
+                                                }
+                                            </div>
+                                    }
+                                </div>
+
+                                :
+
+                                <div>
+                                    {
+                                        !autoGrading
+
+                                        &&
+
+                                        <div>
+                                            {report === 0 && <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>}
+                                            {report === Number(questionObject.points) && <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>}
+                                            <button className={styles.manualButton} onClick={manualGrading}>점수 수정</button>
+                                        </div>
+                                    }
+                                </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    )
+}
+
+export default AnswerSheetQuestion;

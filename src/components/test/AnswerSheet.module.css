@@ -1,0 +1,76 @@
+.blank {
+    height: 120px;
+}
+
+.container {
+    width: 60%;
+    margin-left: 20%;
+}
+
+.autoGradingMode {
+    height: 40px;
+    line-height: 40px;
+    margin-right: 20px;
+}
+
+.autoGradingOnLeft {
+    width: 70px;
+    height: 40px;
+    font-size: 1rem;
+    background-color: rgb(0, 100, 255);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 5px 0px 0px 5px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    margin-right: 2px;
+}
+
+.autoGradingOffLeft {
+    width: 70px;
+    height: 40px;
+    font-size: 1rem;
+    background-color: rgb(230, 230, 230);
+    color: rgb(100, 100, 100);
+    border: none;
+    border-radius: 5px 0px 0px 5px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+.autoGradingOnRight {
+    width: 70px;
+    height: 40px;
+    font-size: 1rem;
+    background-color: rgb(0, 100, 255);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 0px 5px 5px 0px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    margin-right: 2px;
+}
+
+.autoGradingOffRight {
+    width: 70px;
+    height: 40px;
+    font-size: 1rem;
+    background-color: rgb(230, 230, 230);
+    color: rgb(100, 100, 100);
+    border: none;
+    border-radius: 0px 5px 5px 0px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 1200px) {
+    .container {
+        width: 90%;
+        margin-left: 5%;
+    }
+}

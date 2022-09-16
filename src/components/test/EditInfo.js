@@ -11,6 +11,7 @@ function EditInfo({ testInfo, setIsEditingInfo, classId, testId }) {
     const [testName, setTestName] = useState(testInfo.testName);
     const [startDate, setStartDate] = useState(new Date(testInfo.startDate).toLocaleDateString("sv-SE") + "T" + new Date(testInfo.startDate).toLocaleTimeString('en-US', { hour12: false }));
     const [duration, setDuration] = useState(testInfo.duration);
+    const [feedback, setFeedback] = useState(testInfo.feedback);
 
 
 
@@ -23,6 +24,7 @@ function EditInfo({ testInfo, setIsEditingInfo, classId, testId }) {
                 testName: testName,
                 startDate: Date.parse(startDate),
                 duration: Number(duration),
+                feedback: feedback,
             })
 
             alert("설정이 변경되었습니다.");
@@ -59,6 +61,14 @@ function EditInfo({ testInfo, setIsEditingInfo, classId, testId }) {
                 <input className={styles.durationInputBox} type="number" value={duration} onChange={(event) => { setDuration(event.target.value) }} required />
                 분
                 <br />
+
+                <label className={styles.properties}>
+                            피드백 공개
+                        </label>
+
+                        <input className={feedback === false ? styles.typeSelectedLeft : styles.typeNotSelectedLeft} type="button" value="공개 안 함" onClick={() => setFeedback(false)} />
+                        <input className={feedback === true ? styles.typeSelectedRight : styles.typeNotSelectedRight} type="button" value="공개함" onClick={() => setFeedback(true)} />
+                        <br />
 
                 <input className={styles.submitButton} type="submit" value="설정 변경" />
 

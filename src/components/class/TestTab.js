@@ -14,6 +14,7 @@ function TestTab({ userObject, userData, classId }) {
     const [testName, setTestName] = useState("");
     const [startDate, setStartDate] = useState("");
     const [duration, setDuration] = useState(null);
+    const [feedback, setFeedback] = useState(false);
 
     const [myTests, setMyTests] = useState([]);
 
@@ -37,6 +38,7 @@ function TestTab({ userObject, userData, classId }) {
                 testName: testName,
                 startDate: Date.parse(startDate),
                 duration: Number(duration),
+                feedback: feedback,
                 teacherId: userData.userId,
                 createdTime: Date.now(),
             })
@@ -99,9 +101,15 @@ function TestTab({ userObject, userData, classId }) {
                     </div>
             }
 
-            <button className={styles.addButton} onClick={() => { setIsCreatingTest(true) }}>
-                시험 추가
-            </button>
+            {
+                userData.userType === "teacher"
+
+                &&
+
+                <button className={styles.addButton} onClick={() => { setIsCreatingTest(true) }}>
+                    시험 추가
+                </button>
+            }
 
 
 
@@ -132,6 +140,14 @@ function TestTab({ userObject, userData, classId }) {
 
                         <input className={styles.durationInputBox} type="number" value={duration} onChange={(event) => { setDuration(event.target.value) }} required />
                         분
+                        <br />
+
+                        <label className={styles.properties}>
+                            피드백 공개
+                        </label>
+
+                        <input className={feedback === false ? styles.typeSelectedLeft : styles.typeNotSelectedLeft} type="button" value="공개 안 함" onClick={() => setFeedback(false)} />
+                        <input className={feedback === true ? styles.typeSelectedRight : styles.typeNotSelectedRight} type="button" value="공개함" onClick={() => setFeedback(true)} />
                         <br />
 
                         <input className={styles.submitButton} type="submit" value="시험 생성" />

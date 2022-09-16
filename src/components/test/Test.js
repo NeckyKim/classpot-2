@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, setDoc, collection, documentId, orderBy } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, documentId, orderBy } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
 import HeaderBottom from "../header/HeaderBottom";
@@ -30,6 +31,7 @@ function Test({ userObject }) {
     const [testInfo, setTestInfo] = useState([]);
 
     const [myStudents, setMyStudents] = useState([]);
+    const [myStudentsInfo, setMyStudentsInfo] = useState([]);
     const [myQuestions, setMyQuestions] = useState([]);
 
     const [isAddingQuestion, setIsAddingQuestion] = useState(false);
@@ -48,6 +50,17 @@ function Test({ userObject }) {
             setMyStudents(snapshot.docs.map((current) => ({ userId: current.id, ...current.data() })));
         });
     }, [])
+
+    useEffect(() => {
+        for (var i = 0; i < myStudents.length; i++) {
+            const verified = myStudents[i].verified;
+            getDoc(doc(dbService, "users", myStudents[i].userId)).then((doc) => {
+                if (!myStudentsInfo.map((row) => row.userId).includes(doc.data().userId)) {
+                    setMyStudentsInfo(prev => [...prev, { userId: doc.id, verified: verified, ...doc.data() }])
+                }
+            });
+        }
+    }, [myStudents])
 
 
 
@@ -223,6 +236,7 @@ function Test({ userObject }) {
 
                     <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>설정</button>
                     <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>문제</button>
+                    <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>답안지</button>
                     <br />
 
                     {
@@ -238,9 +252,20 @@ function Test({ userObject }) {
                             </button>
                             <br />
 
-                            {testInfo.testName}<br />
-                            {new Date(testInfo.startDate).toLocaleString()}<br />
-                            {testInfo.duration}
+                            <label className={styles.testInfoProperties}>시험 이름</label>
+                            <label className={styles.testInfoValues}>{testInfo.testName}</label><br />
+
+                            <label className={styles.testInfoProperties}>시작 일시</label>
+                            <label className={styles.testInfoValues}>{new Date(testInfo.startDate).toLocaleString()}</label><br />
+
+                            <label className={styles.testInfoProperties}>응시 시간</label>
+                            <label className={styles.testInfoValues}>{testInfo.duration}분</label><br />
+
+                            <label className={styles.testInfoProperties}>종료 일시</label>
+                            <label className={styles.testInfoValues}>{new Date(testInfo.startDate + testInfo.duration * 60000).toLocaleString()}</label><br />
+
+                            <label className={styles.testInfoProperties}>시작 일시</label>
+                            <label className={styles.testInfoValues}>{testInfo.feedback ? "공개 함" : "공개 안 함"}</label><br />
 
                             {
                                 isEditingInfo
@@ -279,6 +304,44 @@ function Test({ userObject }) {
                             }
                         </div>
                     }
+
+                    {
+                        tab === 3
+
+                        &&
+
+                        <div>
+                            {
+                                myStudents.length
+
+                                    ?
+
+                                    <div>
+                                        <div className={styles.headerElements}>
+                                            <div className={styles.headerValue}>학생 이름</div>
+                                        </div>
+
+                                        {
+                                            myStudentsInfo.map((current) => (
+                                                <div className={styles.studentElements}>
+                                                    <Link link to={"answersheet/" + current.userId} style={{ textDecoration: "none" }}>
+                                                        <div className={styles.studentName}>
+                                                            {current.verified ? current.userName : "인증 요청중"}
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+
+                                    :
+
+                                    <div className={styles.noStudents}>
+                                        수업을 듣는 학생이 없습니다.
+                                    </div>
+                            }
+                        </div>
+                    }
                 </div>
             }
 
@@ -301,8 +364,6 @@ function Test({ userObject }) {
 
                             <div>
                                 <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
-
-                                <div className={styles.blank} />
 
                                 <div className={styles.notTestLoader}>
                                     <BeforeTestLoader
@@ -338,7 +399,7 @@ function Test({ userObject }) {
                             isTestTime() === "running"
 
                             &&
-                            <div className={styles.testBackground}>
+                            <div>
                                 <div className={styles.testHeader}>
                                     <div className={styles.headerInfo}>
                                         <span className={styles.className}>
@@ -429,7 +490,27 @@ function Test({ userObject }) {
                                 </div>
 
                                 <div className={styles.notTestSmall}>
-                                    시험 종료 후 피드백이 공개되지 않은 시험입니다.
+                                    {
+                                        testInfo.feedback 
+
+                                            ? 
+
+                                            <div>
+                                                시험 종류 후 피드백이 공개된 시험입니다.
+
+                                                <Link link to={"answersheet/" + userObject.uid} style={{ textDecoration: "none" }}>
+                                                    <div>
+                                                        피드백 확인하기
+                                                    </div>
+                                                </Link>
+                                            </div>
+                                    
+                                            :
+
+                                            <div>
+                                                시험 종료 후 피드백이 공개되지 않은 시험입니다.
+                                            </div>
+                                        }
                                 </div>
                             </div>
                         }
