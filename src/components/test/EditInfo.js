@@ -63,12 +63,12 @@ function EditInfo({ testInfo, setIsEditingInfo, classId, testId }) {
                 <br />
 
                 <label className={styles.properties}>
-                            피드백 공개
-                        </label>
+                    피드백 공개
+                </label>
 
-                        <input className={feedback === false ? styles.typeSelectedLeft : styles.typeNotSelectedLeft} type="button" value="공개 안 함" onClick={() => setFeedback(false)} />
-                        <input className={feedback === true ? styles.typeSelectedRight : styles.typeNotSelectedRight} type="button" value="공개함" onClick={() => setFeedback(true)} />
-                        <br />
+                <input className={feedback === false ? styles.typeSelectedLeft : styles.typeNotSelectedLeft} type="button" value="공개 안 함" onClick={() => setFeedback(false)} />
+                <input className={feedback === true ? styles.typeSelectedRight : styles.typeNotSelectedRight} type="button" value="공개함" onClick={() => setFeedback(true)} />
+                <br />
 
                 <input className={styles.submitButton} type="submit" value="설정 변경" />
 

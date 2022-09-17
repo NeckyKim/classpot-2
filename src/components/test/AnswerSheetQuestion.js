@@ -294,9 +294,9 @@ function AnswerSheetQuestion({ number, questionObject, answer, report, autoGradi
                                             ?
 
                                             <div>
-                                                <button className={styles.gradingButton} onClick={manualGrading}>서술형 채점</button>
-                                                <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>
-                                                <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>
+                                                <label className={styles.gradingButton} onClick={manualGrading}>서술형 채점</label>
+                                                <label className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</label>
+                                                <label className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</label>
                                             </div>
 
                                             :
@@ -308,17 +308,17 @@ function AnswerSheetQuestion({ number, questionObject, answer, report, autoGradi
                                                         ?
 
                                                         <div>
-                                                            <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>
-                                                            <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>
-                                                            <button className={styles.manualButton} onClick={manualGrading}>점수 수정</button>
+                                                            <label className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</label>
+                                                            <label className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</label>
+                                                            <label className={styles.manualButton} onClick={manualGrading}>점수 수정</label>
                                                         </div>
 
                                                         :
 
                                                         <div>
-                                                            {report === 0 && <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>}
-                                                            {report === Number(questionObject.points) && <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>}
-                                                            <button className={styles.manualButton} onClick={manualGrading}>점수 수정</button>
+                                                            {report < Number(questionObject.points) && <label className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</label>}
+                                                            {report > 0 && <label className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</label>}
+                                                            <label className={styles.manualButton} onClick={manualGrading}>점수 수정</label>
                                                         </div>
                                                 }
                                             </div>
@@ -334,9 +334,9 @@ function AnswerSheetQuestion({ number, questionObject, answer, report, autoGradi
                                         &&
 
                                         <div>
-                                            {report === 0 && <button className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</button>}
-                                            {report === Number(questionObject.points) && <button className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</button>}
-                                            <button className={styles.manualButton} onClick={manualGrading}>점수 수정</button>
+                                            {report < Number(questionObject.points) && <label className={styles.changeToCorrectButton} onClick={changeToCorrect}>정답 처리</label>}
+                                            {report > 0 && <label className={styles.changeToIncorrectButton} onClick={changeToIncorrect}>오답 처리</label>}
+                                            <label className={styles.manualButton} onClick={manualGrading}>점수 수정</label>
                                         </div>
                                     }
                                 </div>

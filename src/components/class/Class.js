@@ -7,6 +7,7 @@ import { onSnapshot, query, where } from "firebase/firestore";
 
 import HeaderBottom from "../header/HeaderBottom";
 import StudentTab from "./StudentTab";
+import AttendanceTab from "./AttendanceTab";
 import TestTab from "./TestTab";
 import Error from "../../Error";
 
@@ -111,6 +112,7 @@ function Class({ userObject }) {
                     <button className={tab === 4 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(4) }}>공지사항</button>
 
                     {tab === 1 && <StudentTab userObject={userObject} userData={userData} classId={classId} />}
+                    {tab === 2 && <AttendanceTab userObject={userObject} userData={userData} classId={classId} />}
                     {tab === 3 && <TestTab userObject={userObject} userData={userData} classId={classId} />}
                 </div>
             }
@@ -137,6 +139,7 @@ function Class({ userObject }) {
                                 <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>시험</button>
                                 <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>공지사항</button>
 
+                                {tab === 1 && <AttendanceTab userObject={userObject} userData={userData} classId={classId} />}
                                 {tab === 2 && <TestTab userObject={userObject} userData={userData} classId={classId} />}
                             </div>
 

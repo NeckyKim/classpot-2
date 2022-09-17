@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, setDoc, getDoc, collection, documentId, orderBy } from "firebase/firestore";
+import { doc, setDoc, getDoc, deleteDoc, collection, documentId, orderBy } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
 import HeaderBottom from "../header/HeaderBottom";
@@ -246,9 +246,20 @@ function Test({ userObject }) {
 
                         <div>
                             <button className={styles.addButton} onClick={() => {
-                                setIsEditingInfo(true)
+                                setIsEditingInfo(true);
                             }}>
                                 설정 변경
+                            </button>
+
+                            <button className={styles.deleteButton} onClick={async () => {
+                                const ok = window.confirm("시험을 삭제하시겠습니까?");
+
+                                if (ok) {
+                                    await deleteDoc(doc(dbService, "classes", classId, "tests", testId));
+                                    navigate("/class/" + classId);
+                                }
+                            }}>
+                                시험 삭제
                             </button>
                             <br />
 

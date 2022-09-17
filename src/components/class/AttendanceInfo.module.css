@@ -1,0 +1,107 @@
+.headerElements {
+    height: 40px;
+    background-color: rgb(235, 235, 235);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 100px 200px 210px;
+}
+
+.headerValue {
+    height: 20px;
+    line-height: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.dateProperties {
+    display: inline-block;
+    color: rgb(150, 150, 150);
+    margin-bottom: 30px;
+    margin-right: 20px;
+}
+
+.dateValue {
+    display: inline-block;
+    color: rgb(0, 100, 255);
+    margin-bottom: 30px;
+}
+
+.studentElements {
+    height: 60px;
+    border-bottom: 1px solid rgb(210, 210, 210);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: grid;
+    grid-template-columns: 1fr 100px 200px 210px;
+}
+
+.studentName {
+    font-size: 1.5rem;
+    color: rgb(0, 100, 255);
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.studentStatus {
+    font-size: 1.5rem;
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.studentTime {
+    font-size: 1rem;
+    color: rgb(150, 150, 150);
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+.statusOnTime {
+    color: rgb(100, 200, 100);
+}
+
+.statusLate {
+    color: rgb(255, 200, 50);
+}
+
+.statusAbsent {
+    color: rgb(255, 50, 50);
+}
+
+.changeToOnTimeButton {
+    width: 60px;
+    height: 30px;
+    font-size: 1rem;
+    margin-left: 15px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(100, 200, 100);
+    cursor: pointer;
+}
+
+.changeToOnLateButton {
+    width: 60px;
+    height: 30px;
+    font-size: 1rem;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 200, 50);
+    cursor: pointer;
+}
+
+.changeToOnAbsentButton {
+    width: 60px;
+    height: 30px;
+    font-size: 1rem;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 50, 50);
+    cursor: pointer;
+}

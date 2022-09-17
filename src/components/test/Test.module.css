@@ -63,10 +63,21 @@
     border-radius: 5px;
     border: none;
     margin-bottom: 30px;
+    margin-right: 10px;
     cursor: pointer;
 }
 
-
+.deleteButton {
+    width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 50, 50);
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
 
 .testHeader {
     width: 100vw;
