@@ -171,7 +171,7 @@ function Test({ userObject }) {
 
         return (
             <>
-                {days != 0 && <>{days}일</>} {hours != 0 && <>{hours}시간</>} {minutes != 0 && <>{minutes}분</>} {seconds}초
+                {days !== 0 && <>{days}일</>} {hours !== 0 && <>{hours}시간</>} {minutes !== 0 && <>{minutes}분</>} {seconds}초
             </>
         )
     }

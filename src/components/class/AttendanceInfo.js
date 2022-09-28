@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, setDoc, getDoc, collection, documentId, updateDoc, orderBy } from "firebase/firestore";
-import { onSnapshot, query, where } from "firebase/firestore";
+import { doc, setDoc, collection } from "firebase/firestore";
+import { onSnapshot, query } from "firebase/firestore";
 
 import styles from "./AttendanceInfo.module.css";
 
@@ -49,7 +49,7 @@ function AttendanceInfo({ attendanceObject, studentsObject }) {
                         attendanceList.map((current) => (
                             <div className={styles.studentElements}>
                                 <div className={styles.studentName}>
-                                    {studentsObject[studentsObject.findIndex(i => i.userId == current.studentId)].userName}
+                                    {studentsObject[studentsObject.findIndex(i => i.userId === current.studentId)].userName}
                                 </div>
 
                                 <div className={styles.studentStatus}>
