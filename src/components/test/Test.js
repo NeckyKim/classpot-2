@@ -13,6 +13,9 @@ import AddQuestion from "./AddQuestion";
 import EditInfo from "./EditInfo";
 import Error from "../../Error";
 
+import GetClassInfo from "../hooks/GetClassInfo";
+import GetTestInfo from "../hooks/GetTestInfo";
+
 import BeforeTestLoader from "react-spinners/RingLoader";
 import AfterTestLoader from "react-spinners/PuffLoader";
 
@@ -27,8 +30,8 @@ function Test({ userObject }) {
 
     let navigate = useNavigate();
 
-    const [classInfo, setClassInfo] = useState([]);
-    const [testInfo, setTestInfo] = useState([]);
+    const classInfo = GetClassInfo(classId);
+    const testInfo = GetTestInfo(classId, testId);
 
     const [myStudents, setMyStudents] = useState([]);
     const [myStudentsInfo, setMyStudentsInfo] = useState([]);
@@ -61,26 +64,6 @@ function Test({ userObject }) {
             });
         }
     }, [myStudents])
-
-
-
-    // 수업 정보
-    useEffect(() => {
-        onSnapshot(query(collection(dbService, "classes"), where(documentId(), "==", classId)), (snapshot) => {
-            setClassInfo(snapshot.docs.map((current) => ({ classId: current.id, ...current.data() }))[0]);
-        });
-    }, [])
-
-
-
-    // 시험 정보
-    useEffect(() => {
-        setTestInfo([]);
-
-        onSnapshot(query(collection(dbService, "classes", classId, "tests"), where(documentId(), "==", testId)), (snapshot) => {
-            setTestInfo(snapshot.docs.map((current) => ({ ...current.data() }))[0]);
-        });
-    }, [])
 
 
 

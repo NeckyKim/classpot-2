@@ -7,6 +7,8 @@ import { onSnapshot, query, where } from "firebase/firestore";
 
 import AttendanceInfo from "./AttendanceInfo";
 
+import GetClassInfo from "../hooks/GetClassInfo";
+
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -17,7 +19,7 @@ import styles from "./AttendanceTab.module.css";
 function AttendanceTab({ userObject }) {
     let { classId } = useParams();
 
-    const [classInfo, setClassInfo] = useState([]);
+    const classInfo = GetClassInfo(classId);
 
     const [isCheckingAttendance, setIsCheckingAttendance] = useState(false);
     const [checkingTime, setCheckingTime] = useState(1);
@@ -33,15 +35,6 @@ function AttendanceTab({ userObject }) {
 
     const [myStudents, setMyStudents] = useState([]);
     const [myStudentsInfo, setMyStudentsInfo] = useState([]);
-
-
-
-    // 수업 정보
-    useEffect(() => {
-        onSnapshot(query(collection(dbService, "classes"), where(documentId(), "==", classId)), (snapshot) => {
-            setClassInfo(snapshot.docs.map((current) => ({ classId: current.id, ...current.data() }))[0]);
-        });
-    }, [])
 
 
 

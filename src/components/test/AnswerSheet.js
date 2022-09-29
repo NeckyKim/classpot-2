@@ -8,6 +8,8 @@ import { onSnapshot, query, where, documentId, orderBy } from "firebase/firestor
 import AnswerSheetQuestion from "./AnswerSheetQuestion";
 import Error from "../../Error";
 
+import GetTestInfo from "../hooks/GetTestInfo";
+
 import styles from "./AnswerSheet.module.css";
 
 
@@ -17,23 +19,12 @@ function AnswerSheet({ userObject }) {
     let { testId } = useParams();
     let { studentId } = useParams()
 
-    const [testInfo, setTestInfo] = useState([]);
+    const testInfo = GetTestInfo(classId, testId);
 
     const [myQuestions, setMyQuestions] = useState([]);
     const [answerSheet, setAnswerSheet] = useState([]);
 
     const [reportCard, setReportCard] = useState({});
-
-
-
-    // 시험 정보
-    useEffect(() => {
-        setTestInfo([]);
-
-        onSnapshot(query(collection(dbService, "classes", classId, "tests"), where(documentId(), "==", testId)), (snapshot) => {
-            setTestInfo(snapshot.docs.map((current) => ({ ...current.data() }))[0]);
-        });
-    }, [])
 
 
 

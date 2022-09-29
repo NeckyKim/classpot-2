@@ -11,6 +11,8 @@ import AttendanceTab from "./AttendanceTab";
 import TestTab from "./TestTab";
 import Error from "../../Error";
 
+import GetClassInfo from "../hooks/GetClassInfo";
+
 import styles from "./Class.module.css";
 
 
@@ -23,7 +25,7 @@ function Class({ userObject }) {
     const [teacherMyClasses, setTeacherMyClasses] = useState([]);
     const [studentMyClasses, setStudentMyClasses] = useState([]);
 
-    const [classInfo, setClassInfo] = useState([]);
+    const classInfo = GetClassInfo(classId);
     const [verified, setVerified] = useState([]);
 
 
@@ -48,15 +50,6 @@ function Class({ userObject }) {
     useEffect(() => {
         onSnapshot(query(collection(dbService, "users", userObject.uid, "classes")), (snapshot) => {
             setStudentMyClasses(snapshot.docs.map((current) => ({ classId: current.id, ...current.data() })));
-        });
-    }, [])
-
-
-
-    // 수업 정보
-    useEffect(() => {
-        onSnapshot(query(collection(dbService, "classes"), where(documentId(), "==", classId)), (snapshot) => {
-            setClassInfo(snapshot.docs.map((current) => ({ classId: current.id, ...current.data() }))[0]);
         });
     }, [])
 
