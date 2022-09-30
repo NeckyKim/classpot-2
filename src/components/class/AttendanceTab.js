@@ -142,7 +142,7 @@ function AttendanceTab({ userObject }) {
     // 남은 시간
     function RemainingTime() {
         var currentTime = time
-        var finishTime = new Date(currentAttendanceInfo?.createdTime + Number(currentAttendanceInfo?.checkingTime) * 60000);
+        var finishTime = new Date(currentAttendanceInfo?.createdTime + Number(currentAttendanceInfo?.checkingTime) * 600000);
 
         var diff = finishTime - currentTime;
         setProgress(diff / (Number(currentAttendanceInfo?.checkingTime) * 60000));
@@ -206,7 +206,7 @@ function AttendanceTab({ userObject }) {
                                             ?
 
                                             <div className={styles.attendanceContainer}>
-                                                <div className={styles.attendanceProgressBar}>
+                                                <div>
                                                     <CircularProgressbar
                                                         value={progress * 100}
                                                         strokeWidth={2}
@@ -219,14 +219,20 @@ function AttendanceTab({ userObject }) {
                                                         })}
                                                     />
                                                 </div>
-                                                출석 확인 중
-                                                {currentAttendanceInfo && userObject.uid === classInfo.teacherId && currentAttendanceInfo.checkCode}
+
+                                                <div className={styles.attendanceComment}>
+                                                    출석 확인 중
+                                                </div>
+
+                                                <div className={styles.attendanceNumber}>
+                                                    {currentAttendanceInfo && userObject.uid === classInfo.teacherId && currentAttendanceInfo.checkCode}
+                                                </div>
                                             </div>
 
                                             :
 
                                             <div className={styles.attendanceContainer}>
-                                                <div className={styles.attendanceProgressBar}>
+                                                <div>
                                                     <CircularProgressbar
                                                         value={progress}
                                                         strokeWidth={2}
@@ -265,21 +271,24 @@ function AttendanceTab({ userObject }) {
 
                                                         :
 
-                                                        <div  className={styles.attendanceContainer}>
-                                                            <div className={styles.attendanceProgressBar}>
-                                                        <CircularProgressbar
-                                                            value={progress * 100}
-                                                            strokeWidth={2}
-                                                            text={<RemainingTime />}
-                                                            styles={buildStyles({
-                                                                strokeLinecap: "butt",
-                                                                textColor: "rgb(0, 100, 255)",
-                                                                pathColor: "rgb(0, 100, 255)",
-                                                                trailColor: "rgb(220, 220, 220)"
-                                                            })}
-                                                        />
-                                                    </div>
-                                                            출석 확인 중<br />
+                                                        <div className={styles.attendanceContainer}>
+                                                            <div>
+                                                                <CircularProgressbar
+                                                                    value={progress * 100}
+                                                                    strokeWidth={2}
+                                                                    text={<RemainingTime />}
+                                                                    styles={buildStyles({
+                                                                        strokeLinecap: "butt",
+                                                                        textColor: "rgb(0, 100, 255)",
+                                                                        pathColor: "rgb(0, 100, 255)",
+                                                                        trailColor: "rgb(220, 220, 220)"
+                                                                    })}
+                                                                />
+                                                            </div>
+
+                                                            <div className={styles.attendanceComment}>
+                                                                출석 확인 중
+                                                            </div>
 
                                                             <input type="number" value={inputNumber} onChange={(event) => { setInputNumber(event.target.value) }} required />
 
