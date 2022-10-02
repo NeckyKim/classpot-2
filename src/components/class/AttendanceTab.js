@@ -59,14 +59,20 @@ function AttendanceTab({ userObject }) {
 
 
     // 출석 번호 생성
-    async function checkAttendance() {
+    async function startCheckingAttendance() {
         try {
-            await setDoc(doc(collection(dbService, "classes", classId, "attendance")), {
-                checkCode: String(Math.floor(Math.random() * 10000)).padStart(4, '0'),
-                createdTime: Date.now(),
-                checkingTime: checkingTime,
-                nowChecking: true,
-            })
+            if (checkingTime >= 1 && checkingTime <= 10) {
+                await setDoc(doc(collection(dbService, "classes", classId, "attendance")), {
+                    checkCode: String(Math.floor(Math.random() * 10000)).padStart(4, '0'),
+                    createdTime: Date.now(),
+                    checkingTime: checkingTime,
+                    nowChecking: true,
+                })
+            }
+
+            else {
+                alert("출석 시간은 1분부터 10분까지 지정가능합니다.")
+            }
         }
 
         catch (error) {
@@ -142,7 +148,7 @@ function AttendanceTab({ userObject }) {
     // 남은 시간
     function RemainingTime() {
         var currentTime = time
-        var finishTime = new Date(currentAttendanceInfo?.createdTime + Number(currentAttendanceInfo?.checkingTime) * 600000);
+        var finishTime = new Date(currentAttendanceInfo?.createdTime + Number(currentAttendanceInfo?.checkingTime) * Number(checkingTime) * 60000);
 
         var diff = finishTime - currentTime;
         setProgress(diff / (Number(currentAttendanceInfo?.checkingTime) * 60000));
@@ -155,9 +161,9 @@ function AttendanceTab({ userObject }) {
 
 
 
-    // 출석 종료
+    // 출석 종료(시간 종료)
     if (String(time) === String(new Date(currentAttendanceInfo?.createdTime + Number(currentAttendanceInfo?.checkingTime) * 60000))) {
-        updateDoc(doc(dbService, "classes", classId, "attendance", currentAttendanceInfo.attendanceId), {
+        updateDoc(doc(dbService, "classes", classId, "attendance", currentAttendanceInfo?.attendanceId), {
             nowChecking: false,
         })
 
@@ -168,6 +174,35 @@ function AttendanceTab({ userObject }) {
                     time: null,
                 })
             }
+        }
+    }
+
+
+
+    // 출석 종료(직접 종료)
+    async function stopCheckingAttendance() {
+        try {
+            const ok = window.confirm("출석 확인을 종료하시겠습니까?");
+
+            if (ok) {
+                await updateDoc(doc(dbService, "classes", classId, "attendance", currentAttendanceInfo?.attendanceId), {
+                    nowChecking: false,
+                })
+
+                for (var i = 0; i < myStudents.length; i++) {
+                    if (!checkedStudents.map(row => row.studentId).includes(myStudents[i].userId)) {
+                        setDoc(doc(dbService, "classes", classId, "attendance", currentAttendanceInfo.attendanceId, "list", myStudents[i].userId), {
+                            status: "absent",
+                            time: null,
+                        })
+                    }
+                }
+            }
+        }
+
+        catch (error) {
+            alert("출석 확인 종료에 실패했습니다.");
+            console.log(error)
         }
     }
 
@@ -205,6 +240,7 @@ function AttendanceTab({ userObject }) {
 
                                             ?
 
+                                            // 출석 확인 중
                                             <div className={styles.attendanceContainer}>
                                                 <div>
                                                     <CircularProgressbar
@@ -227,14 +263,20 @@ function AttendanceTab({ userObject }) {
                                                 <div className={styles.attendanceNumber}>
                                                     {currentAttendanceInfo && userObject.uid === classInfo.teacherId && currentAttendanceInfo.checkCode}
                                                 </div>
+
+                                                <button className={styles.startCheckButton} onClick={() => { stopCheckingAttendance() }}>
+                                                    출석 확인 종료
+                                                </button>
+
                                             </div>
 
                                             :
 
+                                            // 출석 확인 아닐 때
                                             <div className={styles.attendanceContainer}>
                                                 <div>
                                                     <CircularProgressbar
-                                                        value={progress}
+                                                        value={0}
                                                         strokeWidth={2}
                                                         text={time.toLocaleString()}
                                                         styles={buildStyles({
@@ -246,8 +288,21 @@ function AttendanceTab({ userObject }) {
                                                     />
                                                 </div>
 
-                                                <button className={styles.startCheckButton} onClick={() => { checkAttendance() }}>출석 번호 생성</button>
-                                                <button className={styles.totalAttendanceButton} onClick={() => { setMode(false) }}>출석부 확인</button>
+                                                <button className={styles.startCheckButton} onClick={() => { startCheckingAttendance() }}>
+                                                    출석 번호 생성
+                                                </button>
+
+                                                <label className={styles.checkingTimeLabel}>
+                                                    출석 확인 시간
+                                                </label>
+                                                <input className={styles.checkingTimeInput} type="number" value={checkingTime} min="1" max="10" onChange={(event) => setCheckingTime(Number(event.target.value))} />
+                                                <label className={styles.checkingTimeMinute}>
+                                                    분
+                                                </label>
+
+                                                <button className={styles.totalAttendanceButton} onClick={() => { setMode(false) }}>
+                                                    출석부 확인
+                                                </button>
                                             </div>
                                     }
                                 </div>
@@ -266,11 +321,29 @@ function AttendanceTab({ userObject }) {
                                                     checkedStudents.map((row) => row.studentId).includes(userObject.uid)
 
                                                         ?
+                                                        <div className={styles.attendanceContainer}>
+                                                            <div>
+                                                                <CircularProgressbar
+                                                                    value={progress * 100}
+                                                                    strokeWidth={2}
+                                                                    text={<RemainingTime />}
+                                                                    styles={buildStyles({
+                                                                        strokeLinecap: "butt",
+                                                                        textColor: "rgb(0, 100, 255)",
+                                                                        pathColor: "rgb(0, 100, 255)",
+                                                                        trailColor: "rgb(220, 220, 220)"
+                                                                    })}
+                                                                />
+                                                            </div>
 
-                                                        "출석 완료"
+                                                            <div className={styles.attendanceComment}>
+                                                                출석 완료
+                                                            </div>
+                                                        </div>
 
                                                         :
 
+                                                        // 출석 확인 중
                                                         <div className={styles.attendanceContainer}>
                                                             <div>
                                                                 <CircularProgressbar
@@ -290,16 +363,16 @@ function AttendanceTab({ userObject }) {
                                                                 출석 확인 중
                                                             </div>
 
-                                                            <input type="number" value={inputNumber} onChange={(event) => { setInputNumber(event.target.value) }} required />
+                                                            <input className={styles.studentAttendanceNumberInput} type="number" value={inputNumber} onChange={(event) => { setInputNumber(event.target.value) }} required />
 
-                                                            <button onClick={() => { confirmAttendance() }}>출석하기</button>
+                                                            <button className={styles.studentCheckAttendanceButton} onClick={() => { confirmAttendance() }}>출석하기</button>
                                                         </div>
                                                 }
                                             </div>
 
                                             :
 
-                                            <div>
+                                            <div className={styles.studentNoAttendance}>
                                                 현재 생성된 출석 번호가 없습니다.
                                             </div>
                                     }

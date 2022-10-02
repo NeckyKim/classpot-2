@@ -8,10 +8,11 @@
 }
 
 .attendanceContainer {
-    width: 400px;
+    width: 320px;
     display: block;
     margin: 0px auto;
     margin-top: 50px;
+    text-align: center;
 }
 
 .attendanceComment {
@@ -27,6 +28,69 @@
     text-align: center;
 }
 
+.studentAttendanceNumberInput {
+    width: 120px;
+    height: 50px;
+    font-size: 1.2rem;
+    color: rgb(0, 100, 255);
+    background-color: rgb(230, 230, 230);
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.studentAttendanceNumberInput[type="number"]::-webkit-outer-spin-button,
+.studentAttendanceNumberInput[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.studentCheckAttendanceButton {
+    width: 100px;
+    height: 50px;
+    font-size: 1.2rem;
+    color: rgb(255, 255, 255);
+    background-color: rgb(250, 150, 50);
+    border-radius: 5px;
+    border: none;
+    margin-left: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.studentNoAttendance {
+    margin-top: 100px;
+    font-size: 1.5rem;
+    font-weight: 1000;
+    color: rgb(120, 120, 120);
+    text-align: center;
+}
+
+.checkingTimeLabel {
+    margin-right: 10px;
+}
+
+.checkingTimeInput {
+    width: 60px;
+    height: 40px;
+    font-size: 1.2rem;
+    color: rgb(250, 150, 50);
+    background-color: rgb(230, 230, 230);
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: right;
+}
+
+.checkingTimeMinute {
+    margin-left: 5px;
+}
+
 .startCheckButton {
     width: 160px;
     height: 50px;
@@ -38,7 +102,7 @@
     cursor: pointer;
     display: block;
     margin: 0px auto;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .goBackButton {

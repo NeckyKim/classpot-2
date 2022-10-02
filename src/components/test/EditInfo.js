@@ -36,6 +36,7 @@ function EditInfo({ testInfo, setIsEditingInfo, classId, testId }) {
         }
     }
 
+    
 
     return (
         <form className={styles.background} onSubmit={editInfo}>
