@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { dbService } from "../../FirebaseModules";
-import { doc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc, collection, deleteDoc } from "firebase/firestore";
 import { onSnapshot, query } from "firebase/firestore";
 
 import styles from "./AttendanceInfo.module.css";
@@ -25,6 +25,13 @@ function AttendanceInfo({ attendanceObject, studentsObject }) {
 
 
 
+    async function deleteAttendanceInfo () {
+        const ok = window.confirm("해당 날짜의 출석부를 삭제하시겠습니까?");
+
+        await deleteDoc(doc(dbService, "classes", classId, "attendance", attendanceObject.attendanceId));
+    }
+
+
     return (
         <div>
             {
@@ -36,6 +43,10 @@ function AttendanceInfo({ attendanceObject, studentsObject }) {
                     <div>
                         <label className={styles.dateProperties}>출석 확인 일시</label>
                         <label className={styles.dateValue}>{attendanceObject && new Date(attendanceObject.createdTime).toLocaleString()}</label>
+
+                        <button className={styles.deleteAttendanceInfo} onClick={deleteAttendanceInfo}>
+                            삭제
+                        </button>
                     </div>
 
                     <div className={styles.headerElements}>
