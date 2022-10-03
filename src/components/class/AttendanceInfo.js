@@ -14,7 +14,7 @@ function AttendanceInfo({ attendanceObject, studentsObject }) {
     const [attendanceList, setAttendanceList] = useState([]);
 
 
-
+    // 해당 출석 정보 불러오기
     useEffect(() => {
         if (attendanceObject) {
             onSnapshot(query(collection(dbService, "classes", classId, "attendance", attendanceObject.attendanceId, "list")), (snapshot) => {
