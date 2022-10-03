@@ -193,7 +193,7 @@ function AttendanceTab({ userObject }) {
                     if (!checkedStudents.map(row => row.studentId).includes(myStudents[i].userId)) {
                         setDoc(doc(dbService, "classes", classId, "attendance", currentAttendanceInfo.attendanceId, "list", myStudents[i].userId), {
                             status: "absent",
-                            time: null,
+                            time: Date.now()
                         })
                     }
                 }
