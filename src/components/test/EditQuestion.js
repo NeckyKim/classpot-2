@@ -16,7 +16,7 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
     const [question, setQuestion] = useState(questionObject.question);
     const [answer, setAnswer] = useState(questionObject.answer);
 
-    const [listOfChoices, setListOfChoices] = useState(questionObject.choices);
+    const [choices, setChoices] = useState(questionObject.choices);
     const [numberOfChoices, setNumberOfChoices] = useState(Object.keys(questionObject.choices).length);
 
 
@@ -31,7 +31,7 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
                 points: points,
                 question: question,
                 answer: answer,
-                choices: listOfChoices,
+                choices: choices,
             })
 
             setIsEditingQuestion(false);
@@ -47,7 +47,7 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
 
 
     function onChangeChoices(event) {
-        setListOfChoices((prev) => {
+        setChoices((prev) => {
             return { ...prev, [event.target.name]: event.target.value }
         });
     }
@@ -67,7 +67,7 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
                     className={type === "객관식" ? styles.typeSelectedLeft : styles.typeNotSelectedLeft}
                     onClick={() => {
                         setType("객관식");
-                        setListOfChoices([]);
+                        setChoices(questionObject.choices);
                         setNumberOfChoices(3);
                         setAnswer(0);
                     }}
@@ -155,7 +155,6 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
 
                             else {
                                 setNumberOfChoices(numberOfChoices + 1);
-                                setAnswer(0);
                             }
                         }} />
 
@@ -165,75 +164,215 @@ function EditQuestion({ questionObject, setIsEditingQuestion }) {
                             }
 
                             else {
-                                delete listOfChoices[numberOfChoices - 1];
+                                delete choices[numberOfChoices - 1];
+                                answer.splice(answer[numberOfChoices - 1], 1)
                                 setNumberOfChoices(numberOfChoices - 1);
-                                setAnswer(0);
                             }
                         }} />
 
 
 
                         <div>
-                            <input type="text" name={0} onChange={onChangeChoices} value={listOfChoices[0]} className={styles.choiceInputBox} required />
-                            <input type="button" onClick={() => { setAnswer(0) }} value="정답" className={answer === 0 ? styles.answerChecked : styles.answerNotChecked} />
+                            <input type="text" name={0} onChange={onChangeChoices} value={choices[0]} className={styles.choiceInputBox} required />
+                            <input type="button" onClick={() => {
+                                setAnswer(() => {
+                                    var temp = [...answer];
+
+                                    if (temp.includes(0)) {
+                                        temp.splice(temp.indexOf(0), 1)
+                                    }
+                                    else {
+                                        temp.push(0);
+                                    }
+    
+                                    temp.sort();
+                                    return temp
+                                });
+                            }} value="정답" className={answer.includes(0) ? styles.answerChecked : styles.answerNotChecked} />
                         </div>
 
                         <div>
-                            <input type="text" name={1} onChange={onChangeChoices} value={listOfChoices[1]} className={styles.choiceInputBox} required />
-                            <input type="button" onClick={() => { setAnswer(1) }} value="정답" className={answer === 1 ? styles.answerChecked : styles.answerNotChecked} />
+                            <input type="text" name={1} onChange={onChangeChoices} value={choices[1]} className={styles.choiceInputBox} required />
+                            <input type="button" onClick={() => { 
+                                setAnswer(() => {
+                                    var temp = [...answer];
+
+                                    if (temp.includes(1)) {
+                                        temp.splice(temp.indexOf(1), 1)
+                                    }
+                                    else {
+                                        temp.push(1);
+                                    }
+    
+                                    temp.sort();
+                                    return temp
+                                });
+                             }} value="정답" className={answer.includes(1) ? styles.answerChecked : styles.answerNotChecked} />
                         </div>
 
                         <div>
-                            <input type="text" name={2} onChange={onChangeChoices} value={listOfChoices[2]} className={styles.choiceInputBox} required />
-                            <input type="button" onClick={() => { setAnswer(2) }} value="정답" className={answer === 2 ? styles.answerChecked : styles.answerNotChecked} />
+                            <input type="text" name={2} onChange={onChangeChoices} value={choices[2]} className={styles.choiceInputBox} required />
+                            <input type="button" onClick={() => { 
+                                setAnswer(() => {
+                                    var temp = [...answer];
+
+                                    if (temp.includes(2)) {
+                                        temp.splice(temp.indexOf(2), 1)
+                                    }
+                                    else {
+                                        temp.push(2);
+                                    }
+    
+                                    temp.sort();
+                                    return temp
+                                });
+                             }} value="정답" className={answer.includes(2) ? styles.answerChecked : styles.answerNotChecked} />
                         </div>
 
                         {numberOfChoices >= 4 &&
                             <div>
-                                <input type="text" name={3} onChange={onChangeChoices} value={listOfChoices[3]} className={styles.choiceInputBox} required />
-                                <input type="button" onClick={() => { setAnswer(3) }} value="정답" className={answer === 3 ? styles.answerChecked : styles.answerNotChecked} />
+                                <input type="text" name={3} onChange={onChangeChoices} value={choices[3]} className={styles.choiceInputBox} required />
+                                <input type="button" onClick={() => { 
+                                    setAnswer(() => {
+                                        var temp = [...answer];
+    
+                                        if (temp.includes(3)) {
+                                            temp.splice(temp.indexOf(3), 1)
+                                        }
+                                        else {
+                                            temp.push(3);
+                                        }
+        
+                                        temp.sort();
+                                        return temp
+                                    });
+                                 }} value="정답" className={answer.includes(3) ? styles.answerChecked : styles.answerNotChecked} />
                             </div>
                         }
 
                         {numberOfChoices >= 5 &&
                             <div>
-                                <input type="text" name={4} onChange={onChangeChoices} value={listOfChoices[4]} className={styles.choiceInputBox} required />
-                                <input type="button" onClick={() => { setAnswer(4) }} value="정답" className={answer === 4 ? styles.answerChecked : styles.answerNotChecked} />
+                                <input type="text" name={4} onChange={onChangeChoices} value={choices[4]} className={styles.choiceInputBox} required />
+                                <input type="button" onClick={() => { 
+                                    setAnswer(() => {
+                                        var temp = [...answer];
+    
+                                        if (temp.includes(4)) {
+                                            temp.splice(temp.indexOf(4), 1)
+                                        }
+                                        else {
+                                            temp.push(4);
+                                        }
+        
+                                        temp.sort();
+                                        return temp
+                                    });
+                                 }} value="정답" className={answer.includes(4) ? styles.answerChecked : styles.answerNotChecked} />
                             </div>
                         }
 
                         {numberOfChoices >= 6 &&
                             <div>
-                                <input type="text" name={5} onChange={onChangeChoices} value={listOfChoices[5]} className={styles.choiceInputBox} required />
-                                <input type="button" onClick={() => { setAnswer(5) }} value="정답" className={answer === 5 ? styles.answerChecked : styles.answerNotChecked} />
+                                <input type="text" name={5} onChange={onChangeChoices} value={choices[5]} className={styles.choiceInputBox} required />
+                                <input type="button" onClick={() => { 
+                                    setAnswer(() => {
+                                        var temp = [...answer];
+    
+                                        if (temp.includes(5)) {
+                                            temp.splice(temp.indexOf(5), 1)
+                                        }
+                                        else {
+                                            temp.push(5);
+                                        }
+        
+                                        temp.sort();
+                                        return temp
+                                    });
+                                 }} value="정답" className={answer.includes(5) ? styles.answerChecked : styles.answerNotChecked} />
                             </div>
                         }
 
                         {numberOfChoices >= 7 &&
                             <div>
-                                <input type="text" name={6} onChange={onChangeChoices} value={listOfChoices[6]} className={styles.choiceInputBox} required />
-                                <input type="button" onClick={() => { setAnswer(6) }} value="정답" className={answer === 6 ? styles.answerChecked : styles.answerNotChecked} />
+                                <input type="text" name={6} onChange={onChangeChoices} value={choices[6]} className={styles.choiceInputBox} required />
+                                <input type="button" onClick={() => { 
+                                    setAnswer(() => {
+                                        var temp = [...answer];
+    
+                                        if (temp.includes(6)) {
+                                            temp.splice(temp.indexOf(6), 1)
+                                        }
+                                        else {
+                                            temp.push(6);
+                                        }
+        
+                                        temp.sort();
+                                        return temp
+                                    });
+                                 }} value="정답" className={answer.includes(6) ? styles.answerChecked : styles.answerNotChecked} />
                             </div>
                         }
 
                         {numberOfChoices >= 8 &&
                             <div>
-                                <input type="text" name={7} onChange={onChangeChoices} value={listOfChoices[7]} className={styles.choiceInputBox} required />
-                                <input type="button" onClick={() => { setAnswer(7) }} value="정답" className={answer === 7 ? styles.answerChecked : styles.answerNotChecked} />
+                                <input type="text" name={7} onChange={onChangeChoices} value={choices[7]} className={styles.choiceInputBox} required />
+                                <input type="button" onClick={() => { 
+                                    setAnswer(() => {
+                                        var temp = [...answer];
+    
+                                        if (temp.includes(7)) {
+                                            temp.splice(temp.indexOf(7), 1)
+                                        }
+                                        else {
+                                            temp.push(7);
+                                        }
+        
+                                        temp.sort();
+                                        return temp
+                                    });
+                                 }} value="정답" className={answer.includes(7) ? styles.answerChecked : styles.answerNotChecked} />
                             </div>
                         }
 
                         {numberOfChoices >= 9 &&
                             <div>
-                                <input type="text" name={8} onChange={onChangeChoices} value={listOfChoices[8]} className={styles.choiceInputBox} required />
-                                <input type="button" onClick={() => { setAnswer(8) }} value="정답" className={answer === 8 ? styles.answerChecked : styles.answerNotChecked} />
+                                <input type="text" name={8} onChange={onChangeChoices} value={choices[8]} className={styles.choiceInputBox} required />
+                                <input type="button" onClick={() => { 
+                                    setAnswer(() => {
+                                        var temp = [...answer];
+    
+                                        if (temp.includes(8)) {
+                                            temp.splice(temp.indexOf(8), 1)
+                                        }
+                                        else {
+                                            temp.push(8);
+                                        }
+        
+                                        temp.sort();
+                                        return temp
+                                    });
+                                }} value="정답" className={answer.includes(8) ? styles.answerChecked : styles.answerNotChecked} />
                             </div>
                         }
 
                         {numberOfChoices >= 10 &&
                             <div>
-                                <input type="text" name={9} onChange={onChangeChoices} value={listOfChoices[9]} className={styles.choiceInputBox} required />
-                                <input type="button" onClick={() => { setAnswer(9) }} value="정답" className={answer === 9 ? styles.answerChecked : styles.answerNotChecked} />
+                                <input type="text" name={9} onChange={onChangeChoices} value={choices[9]} className={styles.choiceInputBox} required />
+                                <input type="button" onClick={() => { 
+                                   setAnswer(() => {
+                                    var temp = [...answer];
+
+                                    if (answer.includes(9)) {
+                                        temp.splice(temp.indexOf(9), 1)
+                                    }
+                                    else {
+                                        temp.push(9);
+                                    }
+    
+                                    temp.sort();
+                                    return temp
+                                });
+                                 }} value="정답" className={answer.includes(9) ? styles.answerChecked : styles.answerNotChecked} />
                             </div>
                         }
                     </div>

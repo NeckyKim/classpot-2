@@ -1,14 +1,6 @@
 import styles from "./StudentQuestion.module.css";
 
 function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }) {
-    function onChoiceClick(event) {
-        setAnswerSheet((prev) => {
-            return { ...prev, [number]: Number(event.target.value) }
-        });
-    }
-
-
-
     function onTrueFalseClick(event) {
         setAnswerSheet((prev) => {
             if (event.target.value === "true") { return { ...prev, [number]: true } }
@@ -17,6 +9,7 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
     }
 
 
+    console.log(answerSheet)
 
     return (
         <div className={styles.questionContainer}>
@@ -57,19 +50,64 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
 
                         <div>
                             <div>
-                                <button value={0} className={answerSheet[number] === 0 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                <button value={0} className={answerSheet[number]?.includes(0) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(0)) {
+                                        temp.splice(temp.indexOf(0), 1)
+                                    }
+                                    else {
+                                        temp.push(0);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                     {questionObject.choices[0]}
                                 </button>
                             </div>
 
                             <div>
-                                <button value={1} className={answerSheet[number] === 1 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                <button value={1} className={answerSheet[number]?.includes(1) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(1)) {
+                                        temp.splice(temp.indexOf(1), 1)
+                                    }
+                                    else {
+                                        temp.push(1);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                     {questionObject.choices[1]}
                                 </button>
                             </div>
 
                             <div>
-                                <button value={2} className={answerSheet[number] === 2 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                <button value={2} className={answerSheet[number]?.includes(2) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(2)) {
+                                        temp.splice(temp.indexOf(2), 1)
+                                    }
+                                    else {
+                                        temp.push(2);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                     {questionObject.choices[2]}
                                 </button>
                             </div>
@@ -80,7 +118,22 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 &&
 
                                 <div>
-                                    <button value={3} className={answerSheet[number] === 3 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                    <button value={3} className={answerSheet[number]?.includes(3) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(3)) {
+                                        temp.splice(temp.indexOf(3), 1)
+                                    }
+                                    else {
+                                        temp.push(3);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                         {questionObject.choices[3]}
                                     </button>
                                 </div>
@@ -92,7 +145,22 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 &&
 
                                 <div>
-                                    <button value={4} className={answerSheet[number] === 4 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                    <button value={4} className={answerSheet[number]?.includes(4) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(4)) {
+                                        temp.splice(temp.indexOf(4), 1)
+                                    }
+                                    else {
+                                        temp.push(4);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                         {questionObject.choices[4]}
                                     </button>
                                 </div>
@@ -104,7 +172,22 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 &&
 
                                 <div>
-                                    <button value={5} className={answerSheet[number] === 5 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                    <button value={5} className={answerSheet[number]?.includes(5) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(5)) {
+                                        temp.splice(temp.indexOf(5), 1)
+                                    }
+                                    else {
+                                        temp.push(5);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                         {questionObject.choices[5]}
                                     </button>
                                 </div>
@@ -116,7 +199,22 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 &&
 
                                 <div>
-                                    <button value={6} className={answerSheet[number] === 6 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                    <button value={6} className={answerSheet[number]?.includes(6) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(6)) {
+                                        temp.splice(temp.indexOf(6), 1)
+                                    }
+                                    else {
+                                        temp.push(6);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                         {questionObject.choices[6]}
                                     </button>
                                 </div>
@@ -128,7 +226,22 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 &&
 
                                 <div>
-                                    <button value={7} className={answerSheet[number] === 7 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                    <button value={7} className={answerSheet[number]?.includes(7) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(7)) {
+                                        temp.splice(temp.indexOf(7), 1)
+                                    }
+                                    else {
+                                        temp.push(7);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                         {questionObject.choices[7]}
                                     </button>
                                 </div>
@@ -140,7 +253,22 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 &&
 
                                 <div>
-                                    <button value={8} className={answerSheet[number] === 8 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                    <button value={8} className={answerSheet[number]?.includes(8) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(8)) {
+                                        temp.splice(temp.indexOf(8), 1)
+                                    }
+                                    else {
+                                        temp.push(8);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                         {questionObject.choices[8]}
                                     </button>
                                 </div>
@@ -152,7 +280,22 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 &&
 
                                 <div>
-                                    <button value={9} className={answerSheet[number] === 9 ? styles.answerChecked : styles.answerNotChecked} onClick={onChoiceClick}>
+                                    <button value={9} className={answerSheet[number]?.includes(9) ? styles.answerChecked : styles.answerNotChecked} onClick={() => {
+                                    var temp = [...answerSheet[number]];
+
+                                    if (temp.includes(9)) {
+                                        temp.splice(temp.indexOf(9), 1)
+                                    }
+                                    else {
+                                        temp.push(9);
+                                    }
+    
+                                    temp.sort();
+
+                                    setAnswerSheet((prev) => {
+                                        return { ...prev, [0]: temp }
+                                    });
+                                }}>
                                         {questionObject.choices[9]}
                                     </button>
                                 </div>

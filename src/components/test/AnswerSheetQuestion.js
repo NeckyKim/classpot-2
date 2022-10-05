@@ -101,17 +101,17 @@ function AnswerSheetQuestion({ number, questionObject, answer, report, autoGradi
                                 보기
                             </div>
 
-                            <div className={questionObject.answer === 0 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[0]}</div>
-                            <div className={questionObject.answer === 1 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[1]}</div>
-                            <div className={questionObject.answer === 2 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[2]}</div>
+                            <div className={questionObject.answer.includes(0) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[0]}</div>
+                            <div className={questionObject.answer.includes(1) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[1]}</div>
+                            <div className={questionObject.answer.includes(2) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[2]}</div>
 
-                            {Object.keys(questionObject.choices).length >= 4 && <div className={questionObject.answer === 3 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[3]}</div>}
-                            {Object.keys(questionObject.choices).length >= 5 && <div className={questionObject.answer === 4 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[4]}</div>}
-                            {Object.keys(questionObject.choices).length >= 6 && <div className={questionObject.answer === 5 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[5]}</div>}
-                            {Object.keys(questionObject.choices).length >= 7 && <div className={questionObject.answer === 6 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[6]}</div>}
-                            {Object.keys(questionObject.choices).length >= 8 && <div className={questionObject.answer === 7 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[7]}</div>}
-                            {Object.keys(questionObject.choices).length >= 9 && <div className={questionObject.answer === 8 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[8]}</div>}
-                            {Object.keys(questionObject.choices).length >= 10 && <div className={questionObject.answer === 9 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[9]}</div>}
+                            {Object.keys(questionObject.choices).length >= 4 && <div className={questionObject.answer.includes(3) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[3]}</div>}
+                            {Object.keys(questionObject.choices).length >= 5 && <div className={questionObject.answer.includes(4) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[4]}</div>}
+                            {Object.keys(questionObject.choices).length >= 6 && <div className={questionObject.answer.includes(5) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[5]}</div>}
+                            {Object.keys(questionObject.choices).length >= 7 && <div className={questionObject.answer.includes(6) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[6]}</div>}
+                            {Object.keys(questionObject.choices).length >= 8 && <div className={questionObject.answer.includes(7) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[7]}</div>}
+                            {Object.keys(questionObject.choices).length >= 9 && <div className={questionObject.answer.includes(8) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[8]}</div>}
+                            {Object.keys(questionObject.choices).length >= 10 && <div className={questionObject.answer.includes(9) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[9]}</div>}
 
                             <div className={styles.answerSheetHeader}>
                                 답안
@@ -119,7 +119,16 @@ function AnswerSheetQuestion({ number, questionObject, answer, report, autoGradi
 
                             <div className={Number(report) === Number(questionObject.points) ? styles.answerSheetZoneCorrect : styles.answerSheetZoneIncorrect}>
                                 <div>
-                                    {answer && questionObject.choices[answer]}
+                                    {answer.includes(0) && <div>{questionObject.choices[0]}</div>}
+                                    {answer.includes(1) && <div>{questionObject.choices[1]}</div>}
+                                    {answer.includes(2) && <div>{questionObject.choices[2]}</div>}
+                                    {answer.includes(3) && <div>{questionObject.choices[3]}</div>}
+                                    {answer.includes(4) && <div>{questionObject.choices[4]}</div>}
+                                    {answer.includes(5) && <div>{questionObject.choices[5]}</div>}
+                                    {answer.includes(6) && <div>{questionObject.choices[6]}</div>}
+                                    {answer.includes(7) && <div>{questionObject.choices[7]}</div>}
+                                    {answer.includes(8) && <div>{questionObject.choices[8]}</div>}
+                                    {answer.includes(9) && <div>{questionObject.choices[9]}</div>}
                                 </div>
 
                                 <div className={Number(report) === Number(questionObject.points) ? styles.reportContainerCorrect : styles.reportContainerIncorrect}>

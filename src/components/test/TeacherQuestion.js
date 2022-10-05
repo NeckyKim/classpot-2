@@ -74,17 +74,17 @@ function TeacherQuestion({ number, questionObject, answerSheet, setAnswerSheet }
                                 보기
                             </div>
 
-                            <div className={questionObject.answer === 0 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[0]}</div>
-                            <div className={questionObject.answer === 1 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[1]}</div>
-                            <div className={questionObject.answer === 2 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[2]}</div>
+                            <div className={questionObject.answer.includes(0) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[0]}</div>
+                            <div className={questionObject.answer.includes(1) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[1]}</div>
+                            <div className={questionObject.answer.includes(2) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[2]}</div>
 
-                            {Object.keys(questionObject.choices).length >= 4 && <div className={questionObject.answer === 3 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[3]}</div>}
-                            {Object.keys(questionObject.choices).length >= 5 && <div className={questionObject.answer === 4 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[4]}</div>}
-                            {Object.keys(questionObject.choices).length >= 6 && <div className={questionObject.answer === 5 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[5]}</div>}
-                            {Object.keys(questionObject.choices).length >= 7 && <div className={questionObject.answer === 6 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[6]}</div>}
-                            {Object.keys(questionObject.choices).length >= 8 && <div className={questionObject.answer === 7 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[7]}</div>}
-                            {Object.keys(questionObject.choices).length >= 9 && <div className={questionObject.answer === 8 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[8]}</div>}
-                            {Object.keys(questionObject.choices).length >= 10 && <div className={questionObject.answer === 9 ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[9]}</div>}
+                            {Object.keys(questionObject.choices).length >= 4 && <div className={questionObject.answer.includes(3) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[3]}</div>}
+                            {Object.keys(questionObject.choices).length >= 5 && <div className={questionObject.answer.includes(4) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[4]}</div>}
+                            {Object.keys(questionObject.choices).length >= 6 && <div className={questionObject.answer.includes(5) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[5]}</div>}
+                            {Object.keys(questionObject.choices).length >= 7 && <div className={questionObject.answer.includes(6) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[6]}</div>}
+                            {Object.keys(questionObject.choices).length >= 8 && <div className={questionObject.answer.includes(7) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[7]}</div>}
+                            {Object.keys(questionObject.choices).length >= 9 && <div className={questionObject.answer.includes(8) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[8]}</div>}
+                            {Object.keys(questionObject.choices).length >= 10 && <div className={questionObject.answer.includes(9) ? styles.choicesAnswer : styles.choicesNormal}>{questionObject.choices[9]}</div>}
                         </div>
                     }
 
