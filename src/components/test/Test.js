@@ -100,7 +100,7 @@ function Test({ userObject }) {
     }, [myQuestions])
 
 
-
+    
     // [학생] 답안지 제출
     async function sendAnswerSheet() {
         try {
@@ -357,6 +357,8 @@ function Test({ userObject }) {
                             &&
 
                             <div>
+                                <div className={styles.blank} />
+
                                 <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
 
                                 <div className={styles.notTestLoader}>

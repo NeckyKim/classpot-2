@@ -95,7 +95,6 @@ function AnswerSheet({ userObject }) {
     }, [])
 
 
-
     // 현재 시간
     const [time, setTime] = useState(new Date());
 
