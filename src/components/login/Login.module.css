@@ -32,7 +32,6 @@
 
 .logo {
     width: 250px;
-
 }
 
 .graphic {
@@ -82,4 +81,34 @@
 .socialLoginIcon {
     height: 24px;
     margin-right: 15px;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .container {
+        width: 80vw;
+        height: 500px;
+        margin: 0px;
+        margin-top: 10vh;
+        margin-left: 10vw;
+        margin-right: 10vw;
+        grid-template-columns: 80vw;
+    }
+
+    .containerRight {
+        padding: 30px;
+    }
+
+    .logo {
+        width: 200px;
+    }
+    
+    .graphic {
+        display: none;
+    }
+
+    .googleButton {
+        width: 100%;
+    }
 }

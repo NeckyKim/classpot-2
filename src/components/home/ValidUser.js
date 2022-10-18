@@ -103,8 +103,8 @@ function ValidUser({ userObject, userData }) {
 
                             <div>
                                 <div className={styles.headerElements}>
-                                    <div className={styles.headerValue}>수업 이름</div>
-                                    <div className={styles.headerValue}>수업 개설 날짜</div>
+                                    <div className={styles.headerValue1}>수업 이름</div>
+                                    <div className={styles.headerValue2}>수업 개설 날짜</div>
                                 </div>
 
                                 {

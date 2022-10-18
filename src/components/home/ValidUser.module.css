@@ -34,7 +34,16 @@
     grid-template-columns: 1fr 150px;
 }
 
-.headerValue {
+.headerValue1 {
+    height: 20px;
+    line-height: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.headerValue2 {
     height: 20px;
     line-height: 20px;
     padding-top: 10px;
@@ -120,4 +129,38 @@
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 10px;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .container {
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .headerElements {
+        grid-template-columns: 1fr;
+    }
+
+    .headerValue2 {
+        display: none;
+    }
+
+    .classElements {
+        height: 50px;
+        grid-template-columns: 1fr;
+    }
+
+    .className {
+        line-height: 20px;
+    }
+
+    .createdTime {
+        display: none;
+    }
+
+    .addContainer {
+        width: 90%;
+    }
 }
