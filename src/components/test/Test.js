@@ -6,13 +6,14 @@ import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, getDoc, deleteDoc, collection, documentId, orderBy } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
-import HeaderBottom from "../header/HeaderBottom";
 import TeacherQuestion from "./TeacherQuestion";
 import StudentQuestion from "./StudentQuestion";
 import AddQuestion from "./AddQuestion";
 import EditInfo from "./EditInfo";
 import Error from "../../Error";
+import UserInfo from "../../UserInfo";
 
+import GetUserInfo from "../hooks/GetUserInfo";
 import GetClassInfo from "../hooks/GetClassInfo";
 import GetTestInfo from "../hooks/GetTestInfo";
 
@@ -30,6 +31,7 @@ function Test({ userObject }) {
 
     let navigate = useNavigate();
 
+    const userInfo = GetUserInfo(userObject.uid)
     const classInfo = GetClassInfo(classId);
     const testInfo = GetTestInfo(classId, testId);
 
@@ -100,7 +102,7 @@ function Test({ userObject }) {
     }, [myQuestions])
 
 
-    
+
     // [학생] 답안지 제출
     async function sendAnswerSheet() {
         try {
@@ -213,129 +215,142 @@ function Test({ userObject }) {
                 &&
 
                 <div className={styles.container}>
-                    <div className={styles.blank} />
+                    <div className={styles.containerLeft}>
+                        <UserInfo userInfo={userInfo} />
+                    </div>
 
-                    <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
+                    <div className={styles.containerRight}>
+                        <div className={styles.containerRightTop}>
+                            <div className={styles.className}>
+                                {classInfo.className}
+                            </div>
 
-                    <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>설정</button>
-                    <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>문제</button>
-                    <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>답안지</button>
-                    <br />
+                            <div className={styles.tabName}>
+                                {testInfo.testName}
+                            </div>
+                        </div>
 
-                    {
-                        tab === 1
-
-                        &&
-
-                        <div>
-                            <button className={styles.addButton} onClick={() => {
-                                setIsEditingInfo(true);
-                            }}>
-                                설정 변경
-                            </button>
-
-                            <button className={styles.deleteButton} onClick={async () => {
-                                const ok = window.confirm("시험을 삭제하시겠습니까?");
-
-                                if (ok) {
-                                    await deleteDoc(doc(dbService, "classes", classId, "tests", testId));
-                                    navigate("/class/" + classId);
-                                }
-                            }}>
-                                시험 삭제
-                            </button>
-                            <br />
-
-                            <label className={styles.testInfoProperties}>시험 이름</label>
-                            <label className={styles.testInfoValues}>{testInfo.testName}</label><br />
-
-                            <label className={styles.testInfoProperties}>시작 일시</label>
-                            <label className={styles.testInfoValues}>{new Date(testInfo.startDate).toLocaleString()}</label><br />
-
-                            <label className={styles.testInfoProperties}>응시 시간</label>
-                            <label className={styles.testInfoValues}>{testInfo.duration}분</label><br />
-
-                            <label className={styles.testInfoProperties}>종료 일시</label>
-                            <label className={styles.testInfoValues}>{new Date(testInfo.startDate + testInfo.duration * 60000).toLocaleString()}</label><br />
-
-                            <label className={styles.testInfoProperties}>시작 일시</label>
-                            <label className={styles.testInfoValues}>{testInfo.feedback ? "공개 함" : "공개 안 함"}</label><br />
+                        <div className={styles.containerRightBottom}>
+                            <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>설정</button>
+                            <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>문제</button>
+                            <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>답안지</button>
 
                             {
-                                isEditingInfo
+                                tab === 1
 
                                 &&
 
-                                <EditInfo testInfo={testInfo} setIsEditingInfo={setIsEditingInfo} classId={classId} testId={testId} />
-                            }
-                        </div>
-                    }
+                                <div>
+                                    <button className={styles.addButton} onClick={() => {
+                                        setIsEditingInfo(true);
+                                    }}>
+                                        설정 변경
+                                    </button>
 
-                    {
-                        tab === 2
+                                    <button className={styles.deleteButton} onClick={async () => {
+                                        const ok = window.confirm("시험을 삭제하시겠습니까?");
 
-                        &&
-
-                        <div>
-                            <button className={styles.addButton} onClick={() => {
-                                setIsAddingQuestion(true)
-                            }}>
-                                문제 추가
-                            </button>
-
-                            {
-                                myQuestions?.map((current, index) => (
-                                    <TeacherQuestion number={index} questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
-                                ))
-                            }
-
-                            {
-                                isAddingQuestion
-
-                                &&
-
-                                <AddQuestion setIsAddingQuestion={setIsAddingQuestion} />
-                            }
-                        </div>
-                    }
-
-                    {
-                        tab === 3
-
-                        &&
-
-                        <div>
-                            {
-                                myStudents.length
-
-                                    ?
-
-                                    <div>
-                                        <div className={styles.headerElements}>
-                                            <div className={styles.headerValue}>학생 이름</div>
-                                        </div>
-
-                                        {
-                                            myStudentsInfo.map((current) => (
-                                                <div className={styles.studentElements}>
-                                                    <Link link to={"answersheet/" + current.userId} style={{ textDecoration: "none" }}>
-                                                        <div className={styles.studentName}>
-                                                            {current.verified ? current.userName : "인증 요청중"}
-                                                        </div>
-                                                    </Link>
-                                                </div>
-                                            ))
+                                        if (ok) {
+                                            await deleteDoc(doc(dbService, "classes", classId, "tests", testId));
+                                            navigate("/class/" + classId);
                                         }
-                                    </div>
+                                    }}>
+                                        시험 삭제
+                                    </button>
+                                    <br />
 
-                                    :
+                                    <label className={styles.testInfoProperties}>시험 이름</label>
+                                    <label className={styles.testInfoValues}>{testInfo.testName}</label><br />
 
-                                    <div className={styles.noStudents}>
-                                        수업을 듣는 학생이 없습니다.
-                                    </div>
+                                    <label className={styles.testInfoProperties}>시작 일시</label>
+                                    <label className={styles.testInfoValues}>{new Date(testInfo.startDate).toLocaleString()}</label><br />
+
+                                    <label className={styles.testInfoProperties}>응시 시간</label>
+                                    <label className={styles.testInfoValues}>{testInfo.duration}분</label><br />
+
+                                    <label className={styles.testInfoProperties}>종료 일시</label>
+                                    <label className={styles.testInfoValues}>{new Date(testInfo.startDate + testInfo.duration * 60000).toLocaleString()}</label><br />
+
+                                    <label className={styles.testInfoProperties}>시작 일시</label>
+                                    <label className={styles.testInfoValues}>{testInfo.feedback ? "공개 함" : "공개 안 함"}</label><br />
+
+                                    {
+                                        isEditingInfo
+
+                                        &&
+
+                                        <EditInfo testInfo={testInfo} setIsEditingInfo={setIsEditingInfo} classId={classId} testId={testId} />
+                                    }
+                                </div>
+                            }
+
+                            {
+                                tab === 2
+
+                                &&
+
+                                <div>
+                                    <button className={styles.addButton} onClick={() => {
+                                        setIsAddingQuestion(true)
+                                    }}>
+                                        문제 추가
+                                    </button>
+
+                                    {
+                                        myQuestions?.map((current, index) => (
+                                            <TeacherQuestion number={index} questionObject={current} answerSheet={answerSheet} setAnswerSheet={setAnswerSheet} />
+                                        ))
+                                    }
+
+                                    {
+                                        isAddingQuestion
+
+                                        &&
+
+                                        <AddQuestion setIsAddingQuestion={setIsAddingQuestion} />
+                                    }
+                                </div>
+                            }
+
+                            {
+                                tab === 3
+
+                                &&
+
+                                <div>
+                                    {
+                                        myStudents.length
+
+                                            ?
+
+                                            <div>
+                                                <div className={styles.headerElements}>
+                                                    <div className={styles.headerValue}>학생 이름</div>
+                                                </div>
+
+                                                {
+                                                    myStudentsInfo.map((current) => (
+                                                        <div className={styles.studentElements}>
+                                                            <Link link to={"answersheet/" + current.userId} style={{ textDecoration: "none" }}>
+                                                                <div className={styles.studentName}>
+                                                                    {current.verified ? current.userName : "인증 요청중"}
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+
+                                            :
+
+                                            <div className={styles.noStudents}>
+                                                수업을 듣는 학생이 없습니다.
+                                            </div>
+                                    }
+                                </div>
                             }
                         </div>
-                    }
+                    </div>
                 </div>
             }
 
@@ -358,8 +373,6 @@ function Test({ userObject }) {
 
                             <div>
                                 <div className={styles.blank} />
-
-                                <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
 
                                 <div className={styles.notTestLoader}>
                                     <BeforeTestLoader
@@ -398,7 +411,7 @@ function Test({ userObject }) {
                             <div>
                                 <div className={styles.testHeader}>
                                     <div className={styles.headerInfo}>
-                                        <span className={styles.className}>
+                                        <span className={styles.headerInfoClassName}>
                                             {classInfo?.className}
                                         </span>
 
@@ -408,7 +421,7 @@ function Test({ userObject }) {
                                             &&
 
 
-                                            <span className={styles.testName}>
+                                            <span className={styles.headerInfoTestName}>
                                                 {testInfo?.testName}
                                             </span>
                                         }
@@ -471,8 +484,6 @@ function Test({ userObject }) {
                             <div>
                                 <div className={styles.blank} />
 
-                                <HeaderBottom className={classInfo?.className} classId={classId} testName={testInfo?.testName} testId={testId} />
-
                                 <div className={styles.notTestLoader}>
                                     <AfterTestLoader
                                         size={200}
@@ -487,9 +498,9 @@ function Test({ userObject }) {
 
                                 <div className={styles.notTestSmall}>
                                     {
-                                        testInfo.feedback 
+                                        testInfo.feedback
 
-                                            ? 
+                                            ?
 
                                             <div>
                                                 시험 종류 후 피드백이 공개된 시험입니다.
@@ -500,13 +511,13 @@ function Test({ userObject }) {
                                                     </div>
                                                 </Link>
                                             </div>
-                                    
+
                                             :
 
                                             <div>
                                                 시험 종료 후 피드백이 공개되지 않은 시험입니다.
                                             </div>
-                                        }
+                                    }
                                 </div>
                             </div>
                         }

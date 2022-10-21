@@ -5,6 +5,9 @@ import { dbService } from "../../FirebaseModules";
 import { doc, getDoc, setDoc, collection } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import Error from "../../Error";
+import UserInfo from "../../UserInfo";
+
 import GetUserInfo from "../hooks/GetUserInfo";
 
 import styles from "./ValidUser.module.css"
@@ -99,25 +102,7 @@ function ValidUser({ userObject }) {
 
                 <div className={styles.container}>
                     <div className={styles.containerLeft}>
-                        <Link to="/">
-                            <div>
-                                <img alt="icon" className={styles.homeButton} src={process.env.PUBLIC_URL + "/logo/classpot_mixed.png"} />
-                            </div>
-                        </Link>
-
-                        <img alt="icon" className={styles.profileIcon} src={process.env.PUBLIC_URL + "/profile/" + userInfo.profileIcon + ".png"} />
-
-                        <div className={styles.userName}>
-                            {userInfo.userName}
-                        </div>
-
-                        <div className={styles.email}>
-                            {userInfo.email}
-                        </div>
-
-                        <div className={userInfo.userType === "teacher" ? styles.userTypeTeacher : styles.userTypeStudent}>
-                            {userInfo.userType === "teacher" ? "선생님" : "학생"}
-                        </div>
+                        <UserInfo userInfo={userInfo} />
                     </div>
 
                     <div className={styles.containerRight}>
@@ -156,8 +141,8 @@ function ValidUser({ userObject }) {
 
                                     :
 
-                                    <div className={styles.noClasses}>
-                                        수업이 없습니다.
+                                    <div>
+                                        <Error message="현재 진행중인 수업이 없습니다." />
                                     </div>
                             }
 
@@ -179,25 +164,7 @@ function ValidUser({ userObject }) {
 
                 <div className={styles.container}>
                     <div className={styles.containerLeft}>
-                        <Link to="/">
-                            <div>
-                                <img alt="icon" className={styles.homeButton} src={process.env.PUBLIC_URL + "/logo/classpot_mixed.png"} />
-                            </div>
-                        </Link>
-
-                        <img alt="icon" className={styles.profileIcon} src={process.env.PUBLIC_URL + "/profile/" + userInfo.profileIcon + ".png"} />
-
-                        <div className={styles.userName}>
-                            {userInfo.userName}
-                        </div>
-
-                        <div className={styles.email}>
-                            {userInfo.email}
-                        </div>
-
-                        <div className={userInfo.userType === "teacher" ? styles.userTypeTeacher : styles.userTypeStudent}>
-                            {userInfo.userType === "teacher" ? "선생님" : "학생"}
-                        </div>
+                        <UserInfo userInfo={userInfo} />
                     </div>
 
                     <div className={styles.containerRight}>
@@ -235,8 +202,8 @@ function ValidUser({ userObject }) {
 
                                     :
 
-                                    <div className={styles.noClasses}>
-                                        수업이 없습니다.
+                                    <div>
+                                        <Error message="현재 수강중인 수업이 없습니다." />
                                     </div>
                             }
                         </div>

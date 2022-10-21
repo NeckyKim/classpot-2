@@ -44,6 +44,8 @@ function AnswerSheet({ userObject }) {
         });
     }, [])
 
+    console.log(answerSheet)
+
 
 
     // 자동 채점

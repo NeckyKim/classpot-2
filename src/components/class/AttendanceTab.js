@@ -5,6 +5,7 @@ import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, getDoc, collection, documentId, updateDoc, orderBy } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import Error from "../../Error";
 import AttendanceInfo from "./AttendanceInfo";
 
 import GetClassInfo from "../hooks/GetClassInfo";
@@ -16,7 +17,7 @@ import styles from "./AttendanceTab.module.css";
 
 
 
-function AttendanceTab({ userObject }) {
+function AttendanceTab({ userInfo }) {
     let { classId } = useParams();
 
     const classInfo = GetClassInfo(classId);
@@ -99,7 +100,7 @@ function AttendanceTab({ userObject }) {
     function confirmAttendance() {
         if (String(inputNumber).padStart(4, '0') === currentAttendanceInfo.checkCode) {
             try {
-                setDoc(doc(dbService, "classes", classId, "attendance", currentAttendanceInfo.attendanceId, "list", userObject.uid), {
+                setDoc(doc(dbService, "classes", classId, "attendance", currentAttendanceInfo.attendanceId, "list", userInfo.userId), {
                     status: "onTime",
                     time: Date.now()
                 })
@@ -220,7 +221,13 @@ function AttendanceTab({ userObject }) {
     return (
         <div className={styles.containerRight}>
             <div className={styles.containerRightTop}>
-                출석
+                <div className={styles.className}>
+                    {classInfo.className}
+                </div>
+
+                <div className={styles.tabName}>
+                    출결
+                </div>
             </div>
 
             <div className={styles.containerRightBottom}>
@@ -234,7 +241,7 @@ function AttendanceTab({ userObject }) {
                         // 출석 진행 모드
                         <div>
                             {
-                                userObject.uid === classInfo.teacherId
+                                userInfo.userId === classInfo.teacherId
 
                                     ?
 
@@ -266,7 +273,7 @@ function AttendanceTab({ userObject }) {
                                                     </div>
 
                                                     <div className={styles.attendanceNumber}>
-                                                        {currentAttendanceInfo && userObject.uid === classInfo.teacherId && currentAttendanceInfo.checkCode}
+                                                        {currentAttendanceInfo && userInfo.userId === classInfo.teacherId && currentAttendanceInfo.checkCode}
                                                     </div>
 
                                                     <button className={styles.startCheckButton} onClick={() => { stopCheckingAttendance() }}>
@@ -323,7 +330,7 @@ function AttendanceTab({ userObject }) {
 
                                                 <div>
                                                     {
-                                                        checkedStudents.map((row) => row.studentId).includes(userObject.uid)
+                                                        checkedStudents.map((row) => row.studentId).includes(userInfo.userId)
 
                                                             ?
                                                             <div className={styles.attendanceContainer}>
@@ -377,8 +384,8 @@ function AttendanceTab({ userObject }) {
 
                                                 :
 
-                                                <div className={styles.studentNoAttendance}>
-                                                    현재 생성된 출석 번호가 없습니다.
+                                                <div>
+                                                    <Error message="현재 생성된 출석 번호가 없습니다." />
                                                 </div>
                                         }
                                     </div>

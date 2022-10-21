@@ -66,11 +66,3 @@
     margin-right: 2px;
     cursor: pointer;
 }
-
-
-@media screen and (max-width: 1200px) {
-    .container {
-        width: 90%;
-        margin-left: 5%;
-    }
-}

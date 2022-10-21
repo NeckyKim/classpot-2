@@ -3,7 +3,7 @@
     background-color: rgb(235, 235, 235);
     border-radius: 5px;
     display: grid;
-    grid-template-columns: 1fr 100px 200px 210px;
+    grid-template-columns: 1fr 100px 230px 210px;
 }
 
 .headerValue {
@@ -45,7 +45,7 @@
     padding-top: 15px;
     padding-bottom: 15px;
     display: grid;
-    grid-template-columns: 1fr 100px 200px 210px;
+    grid-template-columns: 1fr 100px 230px 210px;
 }
 
 .studentName {

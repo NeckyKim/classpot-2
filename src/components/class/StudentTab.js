@@ -4,11 +4,13 @@ import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, getDoc, deleteDoc, collection } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import Error from "../../Error";
+
 import styles from "./StudentTab.module.css";
 
 
 
-function StudentTab({ userObject, userData, classId }) {
+function StudentTab({ classInfo }) {
     const [isAddingStudent, setIsAddingStudent] = useState(false);
     const [studentEmail, setStudentEmail] = useState("");
     const [findingResults, setFindingResults] = useState(undefined);
@@ -22,7 +24,7 @@ function StudentTab({ userObject, userData, classId }) {
 
     // [선생님] 학생 정보 목록
     useEffect(() => {
-        onSnapshot(query(collection(dbService, "classes", classId, "students")), (snapshot) => {
+        onSnapshot(query(collection(dbService, "classes", classInfo.classId, "students")), (snapshot) => {
             setMyStudents(snapshot.docs.map((current) => ({ userId: current.id, ...current.data() })));
         });
     }, [])
@@ -88,11 +90,11 @@ function StudentTab({ userObject, userData, classId }) {
         event.preventDefault();
 
         try {
-            await setDoc(doc(dbService, "users", findingResults.userId, "classes", classId), {
+            await setDoc(doc(dbService, "users", findingResults.userId, "classes", classInfo.classId), {
                 verified: false
             })
 
-            await setDoc(doc(dbService, "classes", classId, "students", findingResults.userId), {
+            await setDoc(doc(dbService, "classes", classInfo.classId, "students", findingResults.userId), {
                 verified: false
             })
 
@@ -116,8 +118,8 @@ function StudentTab({ userObject, userData, classId }) {
             const ok = window.confirm("해당 학생을 삭제하시겠습니까?");
 
             if (ok) {
-                await deleteDoc(doc(dbService, "users", userId, "classes", classId))
-                await deleteDoc(doc(dbService, "classes", classId, "students", userId))
+                await deleteDoc(doc(dbService, "users", userId, "classes", classInfo.classId))
+                await deleteDoc(doc(dbService, "classes", classInfo.classId, "students", userId))
 
                 alert("학생이 삭제되었습니다.");
             }
@@ -133,7 +135,13 @@ function StudentTab({ userObject, userData, classId }) {
     return (
         <div className={styles.containerRight}>
             <div className={styles.containerRightTop}>
-                학생
+                <div className={styles.className}>
+                    {classInfo.className}
+                </div>
+
+                <div className={styles.tabName}>
+                    학생
+                </div>
             </div>
 
             <div className={styles.containerRightBottom}>
@@ -169,8 +177,8 @@ function StudentTab({ userObject, userData, classId }) {
 
                         :
 
-                        <div className={styles.noStudents}>
-                            수업을 듣는 학생이 없습니다.
+                        <div>
+                            <Error message="현재 수강중인 학생이 없습니다." />
                         </div>
                 }
 
@@ -186,7 +194,7 @@ function StudentTab({ userObject, userData, classId }) {
                     &&
 
                     <div className={styles.background}>
-                        <div className={styles.container}>
+                        <div className={styles.addContainer}>
                             <div className={styles.comment}>
                                 수업에 추가할 학생의 이메일을 입력하고, <span className={styles.commentHighlight}>이메일 찾기</span> 버튼을 누르세요.<br />
 

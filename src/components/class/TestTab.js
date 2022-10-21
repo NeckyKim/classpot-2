@@ -5,11 +5,13 @@ import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, collection } from "firebase/firestore";
 import { onSnapshot, query } from "firebase/firestore";
 
+import Error from "../../Error";
+
 import styles from "./TestTab.module.css";
 
 
 
-function TestTab({ userObject, userData, classId }) {
+function TestTab({ userInfo, classInfo }) {
     const [isCreatingTest, setIsCreatingTest] = useState(false);
     const [testName, setTestName] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -22,7 +24,7 @@ function TestTab({ userObject, userData, classId }) {
 
     // [선생님] 시험 목록
     useEffect(() => {
-        onSnapshot(query(collection(dbService, "classes", classId, "tests")), (snapshot) => {
+        onSnapshot(query(collection(dbService, "classes", classInfo.classId, "tests")), (snapshot) => {
             setMyTests(snapshot.docs.map((current) => ({ testId: current.id, ...current.data() })));
         });
     }, [])
@@ -34,12 +36,12 @@ function TestTab({ userObject, userData, classId }) {
         event.preventDefault();
 
         try {
-            await setDoc(doc(collection(dbService, "classes", classId, "tests")), {
+            await setDoc(doc(collection(dbService, "classes", classInfo.classId, "tests")), {
                 testName: testName,
                 startDate: Date.parse(startDate),
                 duration: Number(duration),
                 feedback: feedback,
-                teacherId: userData.userId,
+                teacherId: userInfo.userId,
                 createdTime: Date.now(),
             })
 
@@ -60,7 +62,13 @@ function TestTab({ userObject, userData, classId }) {
     return (
         <div className={styles.containerRight}>
             <div className={styles.containerRightTop}>
-                시험
+                <div className={styles.className}>
+                    {classInfo.className}
+                </div>
+
+                <div className={styles.tabName}>
+                    시험
+                </div>
             </div>
 
             <div className={styles.containerRightBottom}>
@@ -101,13 +109,13 @@ function TestTab({ userObject, userData, classId }) {
 
                         :
 
-                        <div className={styles.noTests}>
-                            시험이 없습니다.
+                        <div>
+                            <Error message="시험이 없습니다." />
                         </div>
                 }
 
                 {
-                    userData.userType === "teacher"
+                    userInfo.userType === "teacher"
 
                     &&
 

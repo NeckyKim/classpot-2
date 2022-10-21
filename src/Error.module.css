@@ -1,7 +1,6 @@
 .errorContainer {
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
+    width: 100%;
+    height: 100%;
     top: 0;
     left: 0;
     z-index: 1;
@@ -11,7 +10,9 @@
 }
 
 .messageText {
-    font-size: 1.5rem;
-    font-weight: 1000;
-    color: rgb(120, 120, 120);
+    font-size: 2rem;
+    font-weight: 100;
+    line-height: 100px;
+    margin-top: 200px;
+    color: rgb(150, 150, 150);
 }

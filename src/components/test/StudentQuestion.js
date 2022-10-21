@@ -8,8 +8,11 @@ function StudentQuestion({ number, questionObject, answerSheet, setAnswerSheet }
         });
     }
 
+    if (questionObject.type === "객관식" && answerSheet[number] === undefined) {
+        answerSheet[number] = [];
+    } 
 
-    console.log(answerSheet)
+    
 
     return (
         <div className={styles.questionContainer}>
