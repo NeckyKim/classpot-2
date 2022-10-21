@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 import { dbService } from "../../FirebaseModules";
 import { doc, setDoc, getDoc, collection, documentId } from "firebase/firestore";
@@ -11,9 +12,11 @@ import AttendanceTab from "./AttendanceTab";
 import TestTab from "./TestTab";
 import Error from "../../Error";
 
+import GetUserInfo from "../hooks/GetUserInfo";
 import GetClassInfo from "../hooks/GetClassInfo";
 
 import styles from "./Class.module.css";
+
 
 
 
@@ -21,19 +24,12 @@ function Class({ userObject }) {
     let { classId } = useParams();
     const [tab, setTab] = useState(1);
 
-    const [userData, setUserData] = useState(undefined);
     const [teacherMyClasses, setTeacherMyClasses] = useState([]);
     const [studentMyClasses, setStudentMyClasses] = useState([]);
 
     const classInfo = GetClassInfo(classId);
+    const userInfo = GetUserInfo(userObject.uid)
     const [verified, setVerified] = useState([]);
-
-
-
-    // 현재 사용자의 정보
-    useEffect(() => {
-        getDoc(doc(dbService, "users", userObject.uid)).then((doc) => { setUserData(doc.data()); });
-    }, []);
 
 
 
@@ -87,32 +83,54 @@ function Class({ userObject }) {
 
 
     return (
-        <div className={styles.container}>
+        <div>
             {
                 // 선생님 화면
-                userData?.userType === "teacher" && teacherMyClasses.map((row) => row.classId).includes(classId)
+                userInfo?.userType === "teacher" && teacherMyClasses.map((row) => row.classId).includes(classId)
 
                 &&
 
-                <div>
-                    <div className={styles.blank} />
+                <div className={styles.container}>
+                    <div className={styles.containerLeft}>
+                        <Link to="/">
+                            <div>
+                                <img alt="icon" className={styles.homeButton} src={process.env.PUBLIC_URL + "/logo/classpot_mixed.png"} />
+                            </div>
+                        </Link>
 
-                    <HeaderBottom className={classInfo?.className} classCode={classInfo?.classId} />
+                        <img alt="icon" className={styles.profileIcon} src={process.env.PUBLIC_URL + "/profile/" + userInfo.profileIcon + ".png"} />
 
-                    <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>학생</button>
-                    <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>출결</button>
-                    <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>시험</button>
-                    <button className={tab === 4 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(4) }}>공지사항</button>
+                        <div className={styles.userName}>
+                            {userInfo.userName}
+                        </div>
 
-                    {tab === 1 && <StudentTab userObject={userObject} userData={userData} classId={classId} />}
-                    {tab === 2 && <AttendanceTab userObject={userObject} userData={userData} classId={classId} />}
-                    {tab === 3 && <TestTab userObject={userObject} userData={userData} classId={classId} />}
+                        <div className={styles.email}>
+                            {userInfo.email}
+                        </div>
+
+                        <div className={userInfo.userType === "teacher" ? styles.userTypeTeacher : styles.userTypeStudent}>
+                            {userInfo.userType === "teacher" ? "선생님" : "학생"}
+                        </div>
+
+                        <div>
+                        </div>
+
+                        <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>학생</button>
+                        <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>출결</button>
+                        <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>시험</button>
+                        <button className={tab === 4 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(4) }}>공지사항</button>
+                    </div>
+
+
+                    {tab === 1 && <StudentTab userObject={userObject} userData={userInfo} classId={classId} />}
+                    {tab === 2 && <AttendanceTab userObject={userObject} userData={userInfo} classId={classId} />}
+                    {tab === 3 && <TestTab userObject={userObject} userData={userInfo} classId={classId} />}
                 </div>
             }
 
             {
                 // 학생 화면
-                userData?.userType === "student"
+                userInfo?.userType === "student" && verified === true
 
                 &&
 
@@ -123,17 +141,40 @@ function Class({ userObject }) {
 
                             ?
 
-                            <div>
-                                <div className={styles.blank} />
+                            <div className={styles.container}>
+                                <div className={styles.containerLeft}>
+                                    <Link to="/">
+                                        <div>
+                                            <img alt="icon" className={styles.homeButton} src={process.env.PUBLIC_URL + "/logo/classpot_mixed.png"} />
+                                        </div>
+                                    </Link>
 
-                                <HeaderBottom className={classInfo?.className} classCode={classInfo?.classId} />
+                                    <img alt="icon" className={styles.profileIcon} src={process.env.PUBLIC_URL + "/profile/" + userInfo.profileIcon + ".png"} />
 
-                                <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>출결</button>
-                                <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>시험</button>
-                                <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>공지사항</button>
+                                    <div className={styles.userName}>
+                                        {userInfo.userName}
+                                    </div>
 
-                                {tab === 1 && <AttendanceTab userObject={userObject} userData={userData} classId={classId} />}
-                                {tab === 2 && <TestTab userObject={userObject} userData={userData} classId={classId} />}
+                                    <div className={styles.email}>
+                                        {userInfo.email}
+                                    </div>
+
+                                    <div className={userInfo.userType === "teacher" ? styles.userTypeTeacher : styles.userTypeStudent}>
+                                        {userInfo.userType === "teacher" ? "선생님" : "학생"}
+                                    </div>
+
+                                    <div>
+                                    </div>
+
+                                    <button className={tab === 1 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(1) }}>출결</button>
+                                    <button className={tab === 2 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(2) }}>시험</button>
+                                    <button className={tab === 3 ? styles.tabSelected : styles.tabNotSelected} onClick={() => { setTab(3) }}>공지사항</button>
+                                </div>
+
+                                
+
+                                {tab === 1 && <AttendanceTab userObject={userObject} userData={userInfo} classId={classId} />}
+                                {tab === 2 && <TestTab userObject={userObject} userData={userInfo} classId={classId} />}
                             </div>
 
                             :
@@ -147,11 +188,14 @@ function Class({ userObject }) {
             }
 
             {
-                userData?.userType === "student" && studentMyClasses.map((row) => row.classId).includes(classId) && verified === false
+                userInfo?.userType === "student" && studentMyClasses.map((row) => row.classId).includes(classId) && verified === false
 
                 &&
+
                 <div>
-                    <br /><br /><br />
+                    <div className={styles.blank} />
+
+                    선생님이 해당 수업에 초대를 했습니다. 수락하시겠습니까?
                     인증 ㄱ?
 
                     <button onClick={verify}>

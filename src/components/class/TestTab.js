@@ -58,109 +58,115 @@ function TestTab({ userObject, userData, classId }) {
 
 
     return (
-        <div>
-            {
-                myTests.length
+        <div className={styles.containerRight}>
+            <div className={styles.containerRightTop}>
+                시험
+            </div>
 
-                    ?
+            <div className={styles.containerRightBottom}>
+                {
+                    myTests.length
 
-                    <div>
-                        <div className={styles.headerElements}>
-                            <div className={styles.headerValue}>시험 이름</div>
-                            <div className={styles.headerValue}>시작 일시</div>
-                            <div className={styles.headerValue}>응시 시간</div>
+                        ?
+
+                        <div>
+                            <div className={styles.headerElements}>
+                                <div className={styles.headerValue}>시험 이름</div>
+                                <div className={styles.headerValue}>시작 일시</div>
+                                <div className={styles.headerValue}>응시 시간</div>
+                            </div>
+
+                            {
+                                myTests.map((current, index) => (
+                                    <div key={index}>
+                                        <Link link to={"test/" + current.testId} style={{ textDecoration: "none" }}>
+                                            <div className={styles.testElements}>
+                                                <div className={styles.testName}>
+                                                    {current.testName}
+                                                </div>
+
+                                                <div className={styles.startDate}>
+                                                    {new Date(current.startDate).toLocaleString()}
+                                                </div>
+
+                                                <div className={styles.startDate}>
+                                                    {current.duration}분
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                ))
+                            }
                         </div>
 
-                        {
-                            myTests.map((current, index) => (
-                                <div key={index}>
-                                    <Link link to={"test/" + current.testId} style={{ textDecoration: "none" }}>
-                                        <div className={styles.testElements}>
-                                            <div className={styles.testName}>
-                                                {current.testName}
-                                            </div>
-                                            
-                                            <div className={styles.startDate}>
-                                                {new Date(current.startDate).toLocaleString()}
-                                            </div>
+                        :
 
-                                            <div className={styles.startDate}>
-                                                {current.duration}분
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </div>
-                            ))
-                        }
-                    </div>
+                        <div className={styles.noTests}>
+                            시험이 없습니다.
+                        </div>
+                }
 
-                    :
+                {
+                    userData.userType === "teacher"
 
-                    <div className={styles.noTests}>
-                        시험이 없습니다.
-                    </div>
-            }
+                    &&
 
-            {
-                userData.userType === "teacher"
-
-                &&
-
-                <button className={styles.addButton} onClick={() => { setIsCreatingTest(true) }}>
-                    시험 추가
-                </button>
-            }
+                    <button className={styles.addButton} onClick={() => { setIsCreatingTest(true) }}>
+                        시험 추가
+                    </button>
+                }
 
 
 
-            {
-                isCreatingTest
+                {
+                    isCreatingTest
 
-                &&
+                    &&
 
-                <form className={styles.background} onSubmit={addTest}>
-                    <div className={styles.container}>
-                        <label className={styles.properties}>
-                            시험 이름
-                        </label>
+                    <form className={styles.background} onSubmit={addTest}>
+                        <div className={styles.container}>
+                            <label className={styles.properties}>
+                                시험 이름
+                            </label>
 
-                        <input className={styles.testNameInputBox} type="text" value={testName} onChange={(event) => { setTestName(event.target.value) }} required />
-                        <br />
+                            <input className={styles.testNameInputBox} type="text" value={testName} onChange={(event) => { setTestName(event.target.value) }} required />
+                            <br />
 
-                        <label className={styles.properties}>
-                            시작 일시
-                        </label>
+                            <label className={styles.properties}>
+                                시작 일시
+                            </label>
 
-                        <input className={styles.testDateInputBox} type="datetime-local" value={startDate} onChange={(event) => { setStartDate(event.target.value) }} required />
-                        <br />
+                            <input className={styles.testDateInputBox} type="datetime-local" value={startDate} onChange={(event) => { setStartDate(event.target.value) }} required />
+                            <br />
 
-                        <label className={styles.properties}>
-                            응시 시간
-                        </label>
+                            <label className={styles.properties}>
+                                응시 시간
+                            </label>
 
-                        <input className={styles.durationInputBox} type="number" value={duration} onChange={(event) => { setDuration(event.target.value) }} required />
-                        분
-                        <br />
+                            <input className={styles.durationInputBox} type="number" value={duration} onChange={(event) => { setDuration(event.target.value) }} required />
+                            분
+                            <br />
 
-                        <label className={styles.properties}>
-                            피드백 공개
-                        </label>
+                            <label className={styles.properties}>
+                                피드백 공개
+                            </label>
 
-                        <input className={feedback === false ? styles.typeSelectedLeft : styles.typeNotSelectedLeft} type="button" value="공개 안 함" onClick={() => setFeedback(false)} />
-                        <input className={feedback === true ? styles.typeSelectedRight : styles.typeNotSelectedRight} type="button" value="공개함" onClick={() => setFeedback(true)} />
-                        <br />
+                            <input className={feedback === false ? styles.typeSelectedLeft : styles.typeNotSelectedLeft} type="button" value="공개 안 함" onClick={() => setFeedback(false)} />
+                            <input className={feedback === true ? styles.typeSelectedRight : styles.typeNotSelectedRight} type="button" value="공개함" onClick={() => setFeedback(true)} />
+                            <br />
 
-                        <input className={styles.submitButton} type="submit" value="시험 생성" />
+                            <input className={styles.submitButton} type="submit" value="시험 생성" />
 
-                        <input className={styles.cancelButton} type="button" value="취소" onClick={() => {
-                            setIsCreatingTest(false);
-                            setTestName("");
-                            setStartDate("");
-                            setDuration(null);
-                        }} />
-                    </div>
-                </form>
-            }
+                            <input className={styles.cancelButton} type="button" value="취소" onClick={() => {
+                                setIsCreatingTest(false);
+                                setTestName("");
+                                setStartDate("");
+                                setDuration(null);
+                            }} />
+                        </div>
+                    </form>
+                }
+            </div>
         </div>
     )
 }

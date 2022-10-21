@@ -5,11 +5,13 @@ import { dbService } from "../../FirebaseModules";
 import { doc, getDoc, setDoc, collection } from "firebase/firestore";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import GetUserInfo from "../hooks/GetUserInfo";
+
 import styles from "./ValidUser.module.css"
 
 
 
-function ValidUser({ userObject, userData }) {
+function ValidUser({ userObject }) {
     const [isCreatingClass, setIsCreatingClass] = useState(false);
     const [className, setClassName] = useState("");
 
@@ -17,6 +19,8 @@ function ValidUser({ userObject, userData }) {
     const [studentMyClasses, setStudentMyClasses] = useState([]);
     const [studentMyClassesInfo, setStudentMyClassesInfo] = useState([]);
     const [numberOfStudents, setNumberOfStudents] = useState(undefined);
+
+    const userInfo = GetUserInfo(userObject.uid)
 
 
 
@@ -27,8 +31,8 @@ function ValidUser({ userObject, userData }) {
         try {
             await setDoc(doc(collection(dbService, "classes")), {
                 className: className,
-                teacherId: userData.userId,
-                teacherName: userData.userName,
+                teacherId: userInfo.userId,
+                teacherName: userInfo.userName,
                 createdTime: Date.now(),
             })
 
@@ -87,54 +91,81 @@ function ValidUser({ userObject, userData }) {
 
     return (
         <div>
-            <div className={styles.blank} />
-
             {
                 // 선생님 화면
-                userData?.userType === "teacher"
+                userInfo?.userType === "teacher"
 
                 &&
 
                 <div className={styles.container}>
-                    {
-                        teacherMyClasses.length
-
-                            ?
-
+                    <div className={styles.containerLeft}>
+                        <Link to="/">
                             <div>
-                                <div className={styles.headerElements}>
-                                    <div className={styles.headerValue1}>수업 이름</div>
-                                    <div className={styles.headerValue2}>수업 개설 날짜</div>
-                                </div>
+                                <img alt="icon" className={styles.homeButton} src={process.env.PUBLIC_URL + "/logo/classpot_mixed.png"} />
+                            </div>
+                        </Link>
 
-                                {
-                                    teacherMyClasses.map((current, index) => (
-                                        <Link link to={"class/" + current.classId} style={{ textDecoration: "none" }}>
-                                            <div className={styles.classElements}>
-                                                <div className={styles.className}>
-                                                    {current.className}
-                                                </div>
+                        <img alt="icon" className={styles.profileIcon} src={process.env.PUBLIC_URL + "/profile/" + userInfo.profileIcon + ".png"} />
 
-                                                <div className={styles.createdTime}>
-                                                    {new Date(current.createdTime).toLocaleDateString()}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    ))
-                                }
-                                <br />
+                        <div className={styles.userName}>
+                            {userInfo.userName}
+                        </div>
+
+                        <div className={styles.email}>
+                            {userInfo.email}
+                        </div>
+
+                        <div className={userInfo.userType === "teacher" ? styles.userTypeTeacher : styles.userTypeStudent}>
+                            {userInfo.userType === "teacher" ? "선생님" : "학생"}
+                        </div>
+                    </div>
+
+                    <div className={styles.containerRight}>
+                        <div className={styles.containerRightTop}>
+                            대시보드
+                        </div>
+
+                        <div className={styles.containerRightBottom}>
+                            <div className={styles.Header}>
+                                현재 진행중인 수업
                             </div>
 
-                            :
+                            {
+                                teacherMyClasses.length
 
-                            <div className={styles.noClasses}>
-                                수업이 없습니다.
-                            </div>
-                    }
+                                    ?
 
-                    <button className={styles.addButton} onClick={() => setIsCreatingClass(true)}>
-                        수업 추가
-                    </button>
+                                    <div>
+                                        {
+                                            teacherMyClasses.map((current, index) => (
+                                                <Link link to={"class/" + current.classId} style={{ textDecoration: "none" }}>
+                                                    <div className={styles.classElements}>
+                                                        <div className={styles.className}>
+                                                            {current.className}
+                                                        </div>
+
+                                                        <div className={styles.createdTime}>
+                                                            {new Date(current.createdTime).toLocaleDateString()}
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            ))
+                                        }
+                                        <br />
+                                    </div>
+
+                                    :
+
+                                    <div className={styles.noClasses}>
+                                        수업이 없습니다.
+                                    </div>
+                            }
+
+                            <button className={styles.addButton} onClick={() => setIsCreatingClass(true)}>
+                                수업 추가
+                            </button>
+                        </div>
+                    </div>
                 </div>
             }
 
@@ -142,47 +173,74 @@ function ValidUser({ userObject, userData }) {
 
             {
                 // 학생 화면
-                userData?.userType === "student"
+                userInfo?.userType === "student"
 
                 &&
 
                 <div className={styles.container}>
-                    {
-                        studentMyClassesInfo.length
-
-                            ?
-
+                    <div className={styles.containerLeft}>
+                        <Link to="/">
                             <div>
-                                <div className={styles.headerElements}>
-                                    <div className={styles.headerValue}>수업 이름</div>
-                                    <div className={styles.headerValue}>수업 개설 날짜</div>
-                                </div>
+                                <img alt="icon" className={styles.homeButton} src={process.env.PUBLIC_URL + "/logo/classpot_mixed.png"} />
+                            </div>
+                        </Link>
 
-                                {
-                                    studentMyClassesInfo.map((current, index) => (
-                                        <Link link to={"class/" + current.classId} style={{ textDecoration: "none" }}>
-                                            <div className={styles.classElements}>
-                                                <div className={styles.className}>
-                                                    {current.className}
-                                                </div>
+                        <img alt="icon" className={styles.profileIcon} src={process.env.PUBLIC_URL + "/profile/" + userInfo.profileIcon + ".png"} />
 
-                                                <div className={styles.createdTime}>
-                                                    {new Date(current.createdTime).toLocaleDateString()}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    ))
-                                }
+                        <div className={styles.userName}>
+                            {userInfo.userName}
+                        </div>
+
+                        <div className={styles.email}>
+                            {userInfo.email}
+                        </div>
+
+                        <div className={userInfo.userType === "teacher" ? styles.userTypeTeacher : styles.userTypeStudent}>
+                            {userInfo.userType === "teacher" ? "선생님" : "학생"}
+                        </div>
+                    </div>
+
+                    <div className={styles.containerRight}>
+                        <div className={styles.containerRightTop}>
+                            대시보드
+                        </div>
+
+                        <div className={styles.containerRightBottom}>
+                            <div className={styles.Header}>
+                                현재 수강중인 수업
                             </div>
 
-                            :
+                            {
+                                studentMyClassesInfo.length
 
-                            <div className={styles.noClasses}>
-                                수업이 없습니다.
-                            </div>
-                    }
+                                    ?
 
-                    <br />
+                                    <div>
+                                        {
+                                            studentMyClassesInfo.map((current, index) => (
+                                                <Link link to={"class/" + current.classId} style={{ textDecoration: "none" }}>
+                                                    <div className={styles.classElements}>
+                                                        <div className={styles.className}>
+                                                            {current.className}
+                                                        </div>
+
+                                                        <div className={styles.createdTime}>
+                                                            {new Date(current.createdTime).toLocaleDateString()}
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            ))
+                                        }
+                                    </div>
+
+                                    :
+
+                                    <div className={styles.noClasses}>
+                                        수업이 없습니다.
+                                    </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             }
 

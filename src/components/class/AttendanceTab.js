@@ -218,192 +218,198 @@ function AttendanceTab({ userObject }) {
 
 
     return (
-        <div>
-            <CurrentTime />
+        <div className={styles.containerRight}>
+            <div className={styles.containerRightTop}>
+                출석
+            </div>
 
-            {
-                mode
+            <div className={styles.containerRightBottom}>
+                <CurrentTime />
 
-                    ?
+                {
+                    mode
 
-                    // 출석 진행 모드
-                    <div>
-                        {
-                            userObject.uid === classInfo.teacherId
+                        ?
 
-                                ?
-
-                                // 선생님 화면
-                                <div>
-                                    {
-                                        currentAttendanceInfo
-
-                                            ?
-
-                                            // 출석 확인 중
-                                            <div className={styles.attendanceContainer}>
-                                                <div>
-                                                    <CircularProgressbar
-                                                        value={progress * 100}
-                                                        strokeWidth={2}
-                                                        text={<RemainingTime />}
-                                                        styles={buildStyles({
-                                                            strokeLinecap: "butt",
-                                                            textColor: "rgb(0, 100, 255)",
-                                                            pathColor: "rgb(0, 100, 255)",
-                                                            trailColor: "rgb(220, 220, 220)"
-                                                        })}
-                                                    />
-                                                </div>
-
-                                                <div className={styles.attendanceComment}>
-                                                    출석 확인 중
-                                                </div>
-
-                                                <div className={styles.attendanceNumber}>
-                                                    {currentAttendanceInfo && userObject.uid === classInfo.teacherId && currentAttendanceInfo.checkCode}
-                                                </div>
-
-                                                <button className={styles.startCheckButton} onClick={() => { stopCheckingAttendance() }}>
-                                                    출석 확인 종료
-                                                </button>
-
-                                            </div>
-
-                                            :
-
-                                            // 출석 확인 아닐 때
-                                            <div className={styles.attendanceContainer}>
-                                                <div>
-                                                    <CircularProgressbar
-                                                        value={0}
-                                                        strokeWidth={2}
-                                                        text={time.toLocaleString()}
-                                                        styles={buildStyles({
-                                                            strokeLinecap: "butt",
-                                                            textSize: "7px",
-                                                            textColor: "rgb(0, 100, 255)",
-                                                            trailColor: "rgb(220, 220, 220)"
-                                                        })}
-                                                    />
-                                                </div>
-
-                                                <button className={styles.startCheckButton} onClick={() => { startCheckingAttendance() }}>
-                                                    출석 번호 생성
-                                                </button>
-
-                                                <label className={styles.checkingTimeLabel}>
-                                                    출석 확인 시간
-                                                </label>
-                                                <input className={styles.checkingTimeInput} type="number" value={checkingTime} min="1" max="10" onChange={(event) => setCheckingTime(Number(event.target.value))} />
-                                                <label className={styles.checkingTimeMinute}>
-                                                    분
-                                                </label>
-
-                                                <button className={styles.totalAttendanceButton} onClick={() => { setMode(false) }}>
-                                                    출석부 확인
-                                                </button>
-                                            </div>
-                                    }
-                                </div>
-
-                                :
-
-                                // 학생 화면
-                                <div>
-                                    {
-                                        currentAttendanceInfo
-
-                                            ?
-
-                                            <div>
-                                                {
-                                                    checkedStudents.map((row) => row.studentId).includes(userObject.uid)
-
-                                                        ?
-                                                        <div className={styles.attendanceContainer}>
-                                                            <div>
-                                                                <CircularProgressbar
-                                                                    value={progress * 100}
-                                                                    strokeWidth={2}
-                                                                    text={<RemainingTime />}
-                                                                    styles={buildStyles({
-                                                                        strokeLinecap: "butt",
-                                                                        textColor: "rgb(0, 100, 255)",
-                                                                        pathColor: "rgb(0, 100, 255)",
-                                                                        trailColor: "rgb(220, 220, 220)"
-                                                                    })}
-                                                                />
-                                                            </div>
-
-                                                            <div className={styles.attendanceComment}>
-                                                                출석 완료
-                                                            </div>
-                                                        </div>
-
-                                                        :
-
-                                                        // 출석 확인 중
-                                                        <div className={styles.attendanceContainer}>
-                                                            <div>
-                                                                <CircularProgressbar
-                                                                    value={progress * 100}
-                                                                    strokeWidth={2}
-                                                                    text={<RemainingTime />}
-                                                                    styles={buildStyles({
-                                                                        strokeLinecap: "butt",
-                                                                        textColor: "rgb(0, 100, 255)",
-                                                                        pathColor: "rgb(0, 100, 255)",
-                                                                        trailColor: "rgb(220, 220, 220)"
-                                                                    })}
-                                                                />
-                                                            </div>
-
-                                                            <div className={styles.attendanceComment}>
-                                                                출석 확인 중
-                                                            </div>
-
-                                                            <input className={styles.studentAttendanceNumberInput} type="number" value={inputNumber} onChange={(event) => { setInputNumber(event.target.value) }} required />
-
-                                                            <button className={styles.studentCheckAttendanceButton} onClick={() => { confirmAttendance() }}>출석하기</button>
-                                                        </div>
-                                                }
-                                            </div>
-
-                                            :
-
-                                            <div className={styles.studentNoAttendance}>
-                                                현재 생성된 출석 번호가 없습니다.
-                                            </div>
-                                    }
-                                </div>
-                        }
-                    </div>
-
-                    :
-
-                    // 출석부 확인 모드
-                    <div className={styles.totalAttendanceContainer}>
+                        // 출석 진행 모드
                         <div>
-                            <button className={styles.goBackButton} onClick={() => { setMode(true) }}>돌아가기</button>
                             {
-                                totalAttendanceInfo
+                                userObject.uid === classInfo.teacherId
 
-                                &&
+                                    ?
 
-                                totalAttendanceInfo.map((current, index) => (
+                                    // 선생님 화면
                                     <div>
-                                        <button className={day === index ? styles.dateSelected : styles.dateNotSelected} onClick={() => { setDay(index) }}>
-                                            {new Date(current.createdTime).toLocaleString()}
-                                        </button>
+                                        {
+                                            currentAttendanceInfo
+
+                                                ?
+
+                                                // 출석 확인 중
+                                                <div className={styles.attendanceContainer}>
+                                                    <div>
+                                                        <CircularProgressbar
+                                                            value={progress * 100}
+                                                            strokeWidth={2}
+                                                            text={<RemainingTime />}
+                                                            styles={buildStyles({
+                                                                strokeLinecap: "butt",
+                                                                textColor: "rgb(0, 100, 255)",
+                                                                pathColor: "rgb(0, 100, 255)",
+                                                                trailColor: "rgb(220, 220, 220)"
+                                                            })}
+                                                        />
+                                                    </div>
+
+                                                    <div className={styles.attendanceComment}>
+                                                        출석 확인 중
+                                                    </div>
+
+                                                    <div className={styles.attendanceNumber}>
+                                                        {currentAttendanceInfo && userObject.uid === classInfo.teacherId && currentAttendanceInfo.checkCode}
+                                                    </div>
+
+                                                    <button className={styles.startCheckButton} onClick={() => { stopCheckingAttendance() }}>
+                                                        출석 확인 종료
+                                                    </button>
+
+                                                </div>
+
+                                                :
+
+                                                // 출석 확인 아닐 때
+                                                <div className={styles.attendanceContainer}>
+                                                    <div>
+                                                        <CircularProgressbar
+                                                            value={0}
+                                                            strokeWidth={2}
+                                                            text={time.toLocaleString()}
+                                                            styles={buildStyles({
+                                                                strokeLinecap: "butt",
+                                                                textSize: "7px",
+                                                                textColor: "rgb(0, 100, 255)",
+                                                                trailColor: "rgb(220, 220, 220)"
+                                                            })}
+                                                        />
+                                                    </div>
+
+                                                    <button className={styles.startCheckButton} onClick={() => { startCheckingAttendance() }}>
+                                                        출석 번호 생성
+                                                    </button>
+
+                                                    <label className={styles.checkingTimeLabel}>
+                                                        출석 확인 시간
+                                                    </label>
+                                                    <input className={styles.checkingTimeInput} type="number" value={checkingTime} min="1" max="10" onChange={(event) => setCheckingTime(Number(event.target.value))} />
+                                                    <label className={styles.checkingTimeMinute}>
+                                                        분
+                                                    </label>
+
+                                                    <button className={styles.totalAttendanceButton} onClick={() => { setMode(false) }}>
+                                                        출석부 확인
+                                                    </button>
+                                                </div>
+                                        }
                                     </div>
-                                ))
+
+                                    :
+
+                                    // 학생 화면
+                                    <div>
+                                        {
+                                            currentAttendanceInfo
+
+                                                ?
+
+                                                <div>
+                                                    {
+                                                        checkedStudents.map((row) => row.studentId).includes(userObject.uid)
+
+                                                            ?
+                                                            <div className={styles.attendanceContainer}>
+                                                                <div>
+                                                                    <CircularProgressbar
+                                                                        value={progress * 100}
+                                                                        strokeWidth={2}
+                                                                        text={<RemainingTime />}
+                                                                        styles={buildStyles({
+                                                                            strokeLinecap: "butt",
+                                                                            textColor: "rgb(0, 100, 255)",
+                                                                            pathColor: "rgb(0, 100, 255)",
+                                                                            trailColor: "rgb(220, 220, 220)"
+                                                                        })}
+                                                                    />
+                                                                </div>
+
+                                                                <div className={styles.attendanceComment}>
+                                                                    출석 완료
+                                                                </div>
+                                                            </div>
+
+                                                            :
+
+                                                            // 출석 확인 중
+                                                            <div className={styles.attendanceContainer}>
+                                                                <div>
+                                                                    <CircularProgressbar
+                                                                        value={progress * 100}
+                                                                        strokeWidth={2}
+                                                                        text={<RemainingTime />}
+                                                                        styles={buildStyles({
+                                                                            strokeLinecap: "butt",
+                                                                            textColor: "rgb(0, 100, 255)",
+                                                                            pathColor: "rgb(0, 100, 255)",
+                                                                            trailColor: "rgb(220, 220, 220)"
+                                                                        })}
+                                                                    />
+                                                                </div>
+
+                                                                <div className={styles.attendanceComment}>
+                                                                    출석 확인 중
+                                                                </div>
+
+                                                                <input className={styles.studentAttendanceNumberInput} type="number" value={inputNumber} onChange={(event) => { setInputNumber(event.target.value) }} required />
+
+                                                                <button className={styles.studentCheckAttendanceButton} onClick={() => { confirmAttendance() }}>출석하기</button>
+                                                            </div>
+                                                    }
+                                                </div>
+
+                                                :
+
+                                                <div className={styles.studentNoAttendance}>
+                                                    현재 생성된 출석 번호가 없습니다.
+                                                </div>
+                                        }
+                                    </div>
                             }
                         </div>
 
-                        {day !== null && <AttendanceInfo attendanceObject={totalAttendanceInfo[day]} studentsObject={myStudentsInfo} />}
-                    </div>
-            }
+                        :
+
+                        // 출석부 확인 모드
+                        <div className={styles.totalAttendanceContainer}>
+                            <div>
+                                <button className={styles.goBackButton} onClick={() => { setMode(true) }}>돌아가기</button>
+                                {
+                                    totalAttendanceInfo
+
+                                    &&
+
+                                    totalAttendanceInfo.map((current, index) => (
+                                        <div>
+                                            <button className={day === index ? styles.dateSelected : styles.dateNotSelected} onClick={() => { setDay(index) }}>
+                                                {new Date(current.createdTime).toLocaleString()}
+                                            </button>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+
+                            {day !== null && <AttendanceInfo attendanceObject={totalAttendanceInfo[day]} studentsObject={myStudentsInfo} />}
+                        </div>
+                }
+            </div>
         </div>
     )
 }

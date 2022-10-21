@@ -131,94 +131,100 @@ function StudentTab({ userObject, userData, classId }) {
 
 
     return (
-        <div>
-            {
-                myStudents.length
+        <div className={styles.containerRight}>
+            <div className={styles.containerRightTop}>
+                학생
+            </div>
 
-                    ?
+            <div className={styles.containerRightBottom}>
+                {
+                    myStudents.length
 
-                    <div>
-                        <div className={styles.headerElements}>
-                            <div className={styles.headerValue}>학생 이름</div>
-                            <div className={styles.headerValue}>이메일</div>
-                        </div>
+                        ?
 
-                        {
-                            myStudentsInfo.map((current) => (
-                                <div className={styles.studentElements}>
-                                    <div className={styles.studentName}>
-                                        {current.verified ? current.userName : "인증 요청중"}
-                                    </div>
-
-                                    <div className={styles.studentEmail}>
-                                        {current.email}
-                                    </div>
-
-                                    <button className={styles.deleteButton} onClick={() => { deleteStudent(current.userId) }}>
-                                        삭제
-                                    </button>
-                                </div>
-                            ))
-                        }
-                    </div>
-
-                    :
-
-                    <div className={styles.noStudents}>
-                        수업을 듣는 학생이 없습니다.
-                    </div>
-            }
-
-            <button className={styles.addButton} onClick={() => { setIsAddingStudent(true) }}>
-                학생 추가
-            </button>
-
-
-
-            {
-                isAddingStudent
-
-                &&
-
-                <div className={styles.background}>
-                    <div className={styles.container}>
-                        <div className={styles.comment}>
-                            수업에 추가할 학생의 이메일을 입력하고, <span className={styles.commentHighlight}>이메일 찾기</span> 버튼을 누르세요.<br />
-
-                            이메일이 존재하는 경우, <span className={styles.commentHighlight}>인증 요청</span> 버튼을 눌러서 학생에게 인증을 요청합니다.<br />
-
-                            해당 학생이 요청을 <span className={styles.commentHighlight}>수락</span>하면 강의에 추가됩니다.
-                        </div>
-
-                        <input className={styles.emailInputBox} type="text" value={studentEmail} required onChange={(event) => { setStudentEmail(event.target.value) }} spellCheck={false} />
-
-                        <button className={styles.emailSearchButton} onClick={() => { findStudentByEmail(studentEmail) }}>이메일 찾기</button>
-
-                        <div className={ableToSendRequest === true ? styles.messageGreen : styles.messageRed}>
-                            {findingMessage}
-                        </div>
-
-                        {
-                            ableToSendRequest
-
-                            &&
-                            
-                            <div>
-                                <button className={styles.sendRequestButton} onClick={sendRequest}>인증 요청</button>
+                        <div>
+                            <div className={styles.headerElements}>
+                                <div className={styles.headerValue}>학생 이름</div>
+                                <div className={styles.headerValue}>이메일</div>
                             </div>
-                        }
 
-                        <button className={styles.cancelButton} onClick={() => {
-                            setIsAddingStudent(false);
-                            setAbleToSendRequest(false);
-                            setStudentEmail("");
-                            setFindingMessage("");
-                        }}>
-                            취소
-                        </button>
+                            {
+                                myStudentsInfo.map((current) => (
+                                    <div className={styles.studentElements}>
+                                        <div className={styles.studentName}>
+                                            {current.verified ? current.userName : "인증 요청중"}
+                                        </div>
+
+                                        <div className={styles.studentEmail}>
+                                            {current.email}
+                                        </div>
+
+                                        <button className={styles.deleteButton} onClick={() => { deleteStudent(current.userId) }}>
+                                            삭제
+                                        </button>
+                                    </div>
+                                ))
+                            }
+                        </div>
+
+                        :
+
+                        <div className={styles.noStudents}>
+                            수업을 듣는 학생이 없습니다.
+                        </div>
+                }
+
+                <button className={styles.addButton} onClick={() => { setIsAddingStudent(true) }}>
+                    학생 추가
+                </button>
+
+
+
+                {
+                    isAddingStudent
+
+                    &&
+
+                    <div className={styles.background}>
+                        <div className={styles.container}>
+                            <div className={styles.comment}>
+                                수업에 추가할 학생의 이메일을 입력하고, <span className={styles.commentHighlight}>이메일 찾기</span> 버튼을 누르세요.<br />
+
+                                이메일이 존재하는 경우, <span className={styles.commentHighlight}>인증 요청</span> 버튼을 눌러서 학생에게 인증을 요청합니다.<br />
+
+                                해당 학생이 요청을 <span className={styles.commentHighlight}>수락</span>하면 강의에 추가됩니다.
+                            </div>
+
+                            <input className={styles.emailInputBox} type="text" value={studentEmail} required onChange={(event) => { setStudentEmail(event.target.value) }} spellCheck={false} />
+
+                            <button className={styles.emailSearchButton} onClick={() => { findStudentByEmail(studentEmail) }}>이메일 찾기</button>
+
+                            <div className={ableToSendRequest === true ? styles.messageGreen : styles.messageRed}>
+                                {findingMessage}
+                            </div>
+
+                            {
+                                ableToSendRequest
+
+                                &&
+
+                                <div>
+                                    <button className={styles.sendRequestButton} onClick={sendRequest}>인증 요청</button>
+                                </div>
+                            }
+
+                            <button className={styles.cancelButton} onClick={() => {
+                                setIsAddingStudent(false);
+                                setAbleToSendRequest(false);
+                                setStudentEmail("");
+                                setFindingMessage("");
+                            }}>
+                                취소
+                            </button>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     )
 }

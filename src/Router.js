@@ -12,9 +12,9 @@ function AppRouter({ isLoggedIn, userObject }) {
     return (
         <div>
             <BrowserRouter>
-                {
+                {/* {
                     isLoggedIn && <HeaderTop />
-                }
+                } */}
 
                 <Routes>
                     {isLoggedIn ? <Route path="/" element={<Home userObject={userObject} />} /> : <Route path="/" element={<Login />} />}

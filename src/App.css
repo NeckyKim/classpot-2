@@ -13,10 +13,10 @@
 } */
 
 @font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 400;
-  src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2) format('woff2'), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff) format('woff'), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.otf) format('opentype');
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 400;
+    src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2) format('woff2'), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff) format('woff'), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.otf) format('opentype');
 }
 
 /* @font-face {
@@ -45,15 +45,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 * {
-  box-sizing: border-box;
-  font-family: 'Noto Sans KR';
-  font-weight: 1000;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR';
+    font-weight: 1000;
+    padding: 0px;
+    margin: 0px;
 }
 
 input:focus {
-  outline: none;
+    outline: none;
 }
 
 textarea:focus {
-  outline: none;
+    outline: none;
 }

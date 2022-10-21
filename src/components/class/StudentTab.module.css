@@ -8,13 +8,22 @@
     z-index: 3;
 }
 
-.container {
-    width: 600px;
-    background-color: rgb(255, 255, 255);
-    border-radius: 10px;
-    display: block;
-    margin: 0px auto;
-    margin-top: 300px;
+.containerRight {
+    display: grid;
+    grid-template-rows: 120px 1fr;
+}
+
+.containerRightTop {
+    font-size: 2rem;
+    font-weight: 100;
+    line-height: 50px;
+    color: rgb(150, 150, 150);
+    border-bottom: 1px solid rgb(210, 210, 210);
+    padding: 30px;
+}
+
+.containerRightBottom {
+    background-color: rgb(245, 245, 245);
     padding: 30px;
 }
 
